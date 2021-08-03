@@ -18,6 +18,8 @@ import com.google.android.gms.location.LocationServices
 import com.weather.R
 import com.weather.databinding.FragmentHomeBinding
 import com.weather.model.Weather
+import com.weather.model.WeatherResponseData
+import com.weather.model.server.WeatherResponse
 import com.weather.viewmodel.WeatherViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -78,10 +80,18 @@ class HomeFragment : Fragment(), WeatherClickListener {
         }
 
         viewModel.weatherByLocation.observe(viewLifecycleOwner, Observer {
-            Timber.d(it.toString())
+            updateUserLocationCard(it)
         })
 
         loadCampaignsData()
+    }
+
+    private fun updateUserLocationCard(response: WeatherResponseData) {
+        binding.userLocationCard.visibility = View.VISIBLE
+        binding.name.text = response.name
+        binding.humidity.text = response.main.humidity.toString()
+        binding.temperature.text = response.main.temp.toString()
+        binding.wind.text = response.wind.speed.toString()
     }
 
     override fun onclick(weather: Weather) {
