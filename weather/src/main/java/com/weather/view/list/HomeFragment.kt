@@ -1,6 +1,7 @@
 package com.weather.view.list
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.location.Location
 import android.net.Uri
@@ -16,14 +17,13 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.weather.R
-import com.weather.common.DensityConverter
-import com.weather.common.ItemHorizontalSpaceDecoration
-import com.weather.common.ItemVerticalSpaceDecoration
 import com.weather.databinding.FragmentHomeBinding
 import com.weather.model.WeatherResponseData
 import com.weather.viewmodel.WeatherViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+
+const val PERMISSIONS_REQUEST_ACCESS_LOCATION: Int = 123
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(), CityOnclickListener {
@@ -54,30 +54,36 @@ class HomeFragment : Fragment(), CityOnclickListener {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
-        if (ActivityCompat.checkSelfPermission(
-                requireActivity(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                requireActivity(),
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return
-        }
-        fusedLocationClient.lastLocation
-            .addOnSuccessListener { location : Location? ->
-                Timber.d("test latitude = ${location?.latitude}, lon = ${location?.longitude}")
-                location?.let {
-                    viewModel.fetchWeatherByLocation(it.latitude.toString(), it.longitude.toString(), "metric")
-                }
-            }
-
         viewModel.favouritesLiveData.observe(viewLifecycleOwner, {
             showFavCitiesList(it.toList())
         })
 
         viewModel.fetchFavourites()
-//        viewModel.addFav("Berlin")
+
+        if (
+            ActivityCompat.checkSelfPermission(
+                requireActivity(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            showPermissionDialog()
+            return
+        }
+        findLocation()
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun findLocation() {
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener { location: Location? ->
+                location?.let {
+                    viewModel.fetchWeatherByLocation(
+                        it.latitude.toString(),
+                        it.longitude.toString(),
+                        "metric"
+                    )
+                }
+            }
     }
 
     private fun initViewSetup() {
@@ -93,28 +99,20 @@ class HomeFragment : Fragment(), CityOnclickListener {
         })
 
         adapter = FavouriteCitiesWeatherAdapter(this)
-
         binding.favCitiesRecyclerView.adapter = adapter
-        binding.favCitiesRecyclerView.addItemDecoration(
-            ItemVerticalSpaceDecoration(
-                DensityConverter.toPixel(
-                    resources, resources.getInteger(R.integer.weather_list_item_vertical_spacing)
-                )
-            )
-        )
-        binding.favCitiesRecyclerView.addItemDecoration(
-            ItemHorizontalSpaceDecoration(
-                DensityConverter.toPixel(
-                    resources, resources.getInteger(R.integer.weather_list_item_horizontal_spacing)
-                )
-            )
-        )
-
         loadCampaignsData()
+
+        binding.tempDegree.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                // The toggle is enabled
+            } else {
+                // The toggle is disabled
+            }
+        }
     }
 
     private fun updateUserLocationCard(response: WeatherResponseData) {
-        binding.userLocationCard.visibility = View.VISIBLE
+        binding.locationCard.visibility = View.VISIBLE
         binding.name.text = response.name
         binding.humidity.text = response.main.humidity.toString()
         binding.temperature.text = response.main.temp.toString()
@@ -131,5 +129,30 @@ class HomeFragment : Fragment(), CityOnclickListener {
 
     private fun showFavCitiesList(list: List<String>) {
         adapter.submitList(list)
+    }
+
+    private fun showPermissionDialog() {
+        requestPermissions(
+            arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
+            PERMISSIONS_REQUEST_ACCESS_LOCATION
+        )
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == PERMISSIONS_REQUEST_ACCESS_LOCATION) {
+            if (grantResults.isNotEmpty()
+                && grantResults.first() == PackageManager.PERMISSION_GRANTED
+            ) {
+                findLocation()
+            }
+            else {
+                // show some error and ask for permission
+            }
+        }
     }
 }
