@@ -103,10 +103,7 @@ class HomeFragment : Fragment(), CityOnclickListener {
 
     private fun initViewSetup() {
         binding.searchProxy.setOnClickListener {
-            val uri = getString(R.string.deeplink_weather_details)
-                .replace("{value}", "true")
-                .replace("{city}", "none")
-            findNavController().navigate(Uri.parse(uri))
+            showSearchFavCity("none", true)
         }
 
         viewModel.weatherByLocation.observe(viewLifecycleOwner, Observer {
