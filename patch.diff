@@ -1,0 +1,182 @@
+diff --git a/app/src/main/AndroidManifest.xml b/app/src/main/AndroidManifest.xml
+index 56515b1..66e6e16 100644
+--- a/app/src/main/AndroidManifest.xml
++++ b/app/src/main/AndroidManifest.xml
+@@ -21,7 +21,7 @@
+         </activity>
+ 
+ 
+-        <activity android:name="com.weather.view.detail.WeatherDetailActivity" />
++        <activity android:name="com.weather.view.detail.WeatherDetailActivity"/>
+         <activity android:name="com.weather.view.list.WeatherListActivity" />
+ 
+     </application>
+diff --git a/app/src/main/res/navigation/mobile_navigation.xml b/app/src/main/res/navigation/mobile_navigation.xml
+index 6b73934..b594cef 100644
+--- a/app/src/main/res/navigation/mobile_navigation.xml
++++ b/app/src/main/res/navigation/mobile_navigation.xml
+@@ -9,4 +9,12 @@
+         android:name="com.weather.view.list.HomeFragment"
+         tools:layout="@layout/fragment_main">
+     </fragment>
++
++    <fragment
++        android:id="@+id/weather_details"
++        android:name="com.weather.view.detail.WeatherDetailFragment"
++        android:label="Weather Details"
++        tools:layout="@layout/fragment_forecast_weather_detail">
++        <deepLink app:uri="@string/deeplink_weather_details" />
++    </fragment>
+ </navigation>
+\ No newline at end of file
+diff --git a/weather/build.gradle b/weather/build.gradle
+index 9e03def..6872734 100644
+--- a/weather/build.gradle
++++ b/weather/build.gradle
+@@ -73,6 +73,7 @@ dependencies {
+     implementation 'com.squareup.okhttp3:logging-interceptor:4.9.1'
+     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+     implementation 'com.squareup.retrofit2:converter-moshi:2.9.0'
++    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
+ 
+     implementation 'com.squareup.moshi:moshi-kotlin:1.12.0'
+     kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.12.0'
+diff --git a/weather/src/main/java/com/weather/view/list/HomeFragment.kt b/weather/src/main/java/com/weather/view/list/HomeFragment.kt
+index d642e65..75017e8 100644
+--- a/weather/src/main/java/com/weather/view/list/HomeFragment.kt
++++ b/weather/src/main/java/com/weather/view/list/HomeFragment.kt
+@@ -1,110 +1,49 @@
+ package com.weather.view.list
+ 
++import android.net.Uri
+ import android.os.Bundle
+ import android.view.LayoutInflater
+ import android.view.View
+ import android.view.ViewGroup
+ import androidx.fragment.app.Fragment
+ import androidx.fragment.app.viewModels
+-import androidx.lifecycle.Lifecycle
+-import androidx.lifecycle.lifecycleScope
+-import androidx.lifecycle.repeatOnLifecycle
++import androidx.navigation.fragment.findNavController
+ import com.weather.R
+-import com.weather.common.DensityConverter
+-import com.weather.common.ItemHorizontalSpaceDecoration
+-import com.weather.common.ItemVerticalSpaceDecoration
+-import com.weather.databinding.ActivityWeatherListBinding
++import com.weather.databinding.FragmentHomeBinding
+ import com.weather.model.Weather
+-import com.weather.model.server.WeatherStates
+-import com.weather.view.detail.WeatherDetailActivity
+ import com.weather.viewmodel.WeatherViewModel
+ import dagger.hilt.android.AndroidEntryPoint
+-import kotlinx.coroutines.flow.collect
+-import kotlinx.coroutines.launch
+ 
+ @AndroidEntryPoint
+ class HomeFragment : Fragment(), WeatherClickListener {
+ 
+     private val viewModel: WeatherViewModel by viewModels()
+ 
+-    private lateinit var binding: ActivityWeatherListBinding
++    private lateinit var binding: FragmentHomeBinding
+     private lateinit var adapter : WeatherListAdapter
+ 
+     override fun onCreateView(
+         inflater: LayoutInflater, container: ViewGroup?,
+         savedInstanceState: Bundle?
+     ): View {
+-        binding = ActivityWeatherListBinding.inflate(layoutInflater)
+-
+-        binding.retry.setOnClickListener {
+-            loadCampaignsData()
+-        }
+-        adapter = WeatherListAdapter(this)
+-
+-        binding.campaignsRecycler.adapter = adapter
+-        binding.campaignsRecycler.addItemDecoration(
+-            ItemVerticalSpaceDecoration(
+-                DensityConverter.toPixel(
+-                    resources, resources.getInteger(R.integer.weather_list_item_vertical_spacing)
+-                )
+-            )
+-        )
+-        binding.campaignsRecycler.addItemDecoration(
+-            ItemHorizontalSpaceDecoration(
+-                DensityConverter.toPixel(
+-                    resources, resources.getInteger(R.integer.weather_list_item_horizontal_spacing)
+-                )
+-            )
+-        )
++        binding = FragmentHomeBinding.inflate(layoutInflater)
+         return binding.root
+     }
+ 
+     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+         super.onViewCreated(view, savedInstanceState)
+-        viewLifecycleOwner.lifecycleScope.launch {
+-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+-                viewModel.weatherStateFlow.collect { campaigns ->
+-                    processViewState(campaigns)
+-                }
+-            }
+-        }
+-        loadCampaignsData()
++        initViewSetup()
+     }
+ 
+-    private fun processViewState(weatherState: WeatherStates) {
+-        binding.loadingIndicator.visibility = View.GONE
+-        binding.errorContainer.visibility = View.GONE
+-        binding.noContent.visibility = View.GONE
+-        binding.campaignsRecycler.visibility = View.GONE
+-        when(weatherState) {
+-            is WeatherStates.Loading -> {
+-                binding.loadingIndicator.visibility = View.VISIBLE
+-            }
+-            is WeatherStates.NoContent -> {
+-                binding.noContent.visibility = View.VISIBLE
+-            }
+-            is WeatherStates.Success -> {
+-                binding.campaignsRecycler.visibility = View.VISIBLE
+-                showDate(weatherState.list)
+-            }
+-            is WeatherStates.Error -> {
+-                binding.errorContainer.visibility = View.VISIBLE
+-            }
+-        }
+-    }
+-
+-    private fun loadCampaignsData() {
+-        binding.loadingIndicator.visibility = View.GONE
+-        binding.errorContainer.visibility = View.GONE
+-//        viewModel.fetchCampaigns()
+-        viewModel.fetchWeekWeather()
+-    }
+ 
+-    private fun showDate(list: List<Weather>) {
+-        adapter.submitList(list)
++    private fun initViewSetup() {
++        binding.searchProxy.setOnClickListener {
++            val uri = getString(R.string.deeplink_weather_details).replace("{value}", "true")
++            findNavController().navigate(Uri.parse(uri))
++        }
+     }
+ 
+     override fun onclick(weather: Weather) {
+-        WeatherDetailActivity.startDetailActivity(requireActivity(), weather)
++        TODO("Not yet implemented")
+     }
+ }
+\ No newline at end of file
+diff --git a/weather/src/main/res/values/strings.xml b/weather/src/main/res/values/strings.xml
+index 88a304d..1e58202 100644
+--- a/weather/src/main/res/values/strings.xml
++++ b/weather/src/main/res/values/strings.xml
+@@ -4,4 +4,5 @@
+     <string name="text_retry">Retry</string>
+     <string name="weather_name_text">Weather Name</string>
+     <string name="weather_description_text">Weather Description</string>
++    <string name="deeplink_weather_details" translatable="false">weatherapp://weather/details?showSearchBar={value}</string>
+ </resources>
+\ No newline at end of file

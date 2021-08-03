@@ -9,4 +9,12 @@
         android:name="com.weather.view.list.HomeFragment"
         tools:layout="@layout/fragment_main">
     </fragment>
+
+    <fragment
+        android:id="@+id/weather_details"
+        android:name="com.weather.view.detail.WeatherDetailFragment"
+        android:label="Weather Details"
+        tools:layout="@layout/fragment_forecast_weather_detail">
+        <deepLink app:uri="@string/deeplink_weather_details" />
+    </fragment>
 </navigation>
