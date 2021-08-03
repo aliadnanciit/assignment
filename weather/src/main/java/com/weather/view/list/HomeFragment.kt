@@ -18,6 +18,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.weather.R
 import com.weather.databinding.FragmentHomeBinding
+import com.weather.model.UserWeatherState
 import com.weather.model.WeatherResponseData
 import com.weather.viewmodel.WeatherViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -95,7 +96,26 @@ class HomeFragment : Fragment(), CityOnclickListener {
         }
 
         viewModel.weatherByLocation.observe(viewLifecycleOwner, Observer {
-            updateUserLocationCard(it)
+            it?.let { userWeatherState ->
+                binding.locationBasedWeather.visibility = View.GONE
+                binding.userWeatherLoading.visibility = View.GONE
+                binding.userWeatherPermission.visibility = View.GONE
+                when(userWeatherState) {
+                    is UserWeatherState.Success -> {
+                        updateUserLocationCard(userWeatherState.results)
+                    }
+                    is UserWeatherState.Error -> {
+
+                    }
+                    is UserWeatherState.Loading -> {
+                        binding.userWeatherLoading.visibility = View.VISIBLE
+                    }
+                    is UserWeatherState.PermissionRequired -> {
+                        binding.userWeatherPermission.visibility = View.VISIBLE
+                    }
+                }
+            }
+
         })
 
         adapter = FavouriteCitiesWeatherAdapter(this)
@@ -109,10 +129,14 @@ class HomeFragment : Fragment(), CityOnclickListener {
                 // The toggle is disabled
             }
         }
+
+        binding.permissionButton.setOnClickListener {
+            showPermissionDialog()
+        }
     }
 
     private fun updateUserLocationCard(response: WeatherResponseData) {
-        binding.locationCard.visibility = View.VISIBLE
+        binding.locationBasedWeather.visibility = View.VISIBLE
         binding.name.text = response.name
         binding.humidity.text = response.main.humidity.toString()
         binding.temperature.text = response.main.temp.toString()
@@ -151,7 +175,7 @@ class HomeFragment : Fragment(), CityOnclickListener {
                 findLocation()
             }
             else {
-                // show some error and ask for permission
+                viewModel.needLocationPermission()
             }
         }
     }

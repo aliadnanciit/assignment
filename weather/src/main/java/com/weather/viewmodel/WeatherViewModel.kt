@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weather.model.ForecastWeather
+import com.weather.model.UserWeatherState
 import com.weather.model.WeatherResponseData
 import com.weather.model.server.WeatherStates
 import com.weather.usecase.*
@@ -28,8 +29,9 @@ class WeatherViewModel @Inject constructor(
     val weatherStateFlow: StateFlow<WeatherStates> = _weatherStateFlow
 
     val weatherForecastLiveData = MutableLiveData<ForecastWeather>()
-    val weatherByLocation = MutableLiveData<WeatherResponseData>()
+    val weatherByLocation = MutableLiveData<UserWeatherState<WeatherResponseData>>(UserWeatherState.Loading)
     val favouritesLiveData = MutableLiveData<Set<String>>()
+
 
     init {
         getWeather()
@@ -66,6 +68,8 @@ class WeatherViewModel @Inject constructor(
     }
 
     fun fetchWeatherByLocation(lat: String, lon: String, units: String) {
+        weatherByLocation.value = UserWeatherState.Loading
+
         viewModelScope.launch {
             val response = fetchWeatherByLocationUseCase.execute(
                 lat,
@@ -73,7 +77,7 @@ class WeatherViewModel @Inject constructor(
                 "710c6ff29ebad2f6059e31dd6c25923a",
                 "metric"
             )
-            weatherByLocation.value = response
+            weatherByLocation.value = UserWeatherState.Success(response)
         }
     }
 
@@ -88,5 +92,9 @@ class WeatherViewModel @Inject constructor(
         viewModelScope.launch {
             favouritesUseCase.addFavouriteCity(cityName)
         }
+    }
+
+    fun needLocationPermission() {
+        weatherByLocation.value = UserWeatherState.PermissionRequired
     }
 }
