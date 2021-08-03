@@ -43,11 +43,11 @@ android {
     productFlavors {
         staging {
             dimension "version"
-            buildConfigField "String", "BASE_URL", '"https://static.westwing.de"'
+            buildConfigField "String", "BASE_URL", '"https://api.openweathermap.org/data/2.5/"'
         }
         prod {
             dimension "version"
-            buildConfigField "String", "BASE_URL", '"https://static.westwing.de"'
+            buildConfigField "String", "BASE_URL", '"https://api.openweathermap.org/data/2.5/"'
         }
     }
 }

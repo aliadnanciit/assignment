@@ -96,7 +96,8 @@ class HomeFragment : Fragment(), WeatherClickListener {
     private fun loadCampaignsData() {
         binding.loadingIndicator.visibility = View.GONE
         binding.errorContainer.visibility = View.GONE
-        viewModel.fetchCampaigns()
+//        viewModel.fetchCampaigns()
+        viewModel.fetchWeekWeather()
     }
 
     private fun showDate(list: List<Weather>) {

@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -40,16 +41,36 @@ class WeatherRepositoryImpl @Inject constructor(
             .flowOn(ioDispatcher)
     }
 
-    override suspend fun fetchWeatherList() {
+    override suspend fun fetchWeatherList(city: String, apiKey: String) {
         withContext(ioDispatcher) {
             val response = safeApiCall {
-                weatherApi.getCampaigns()
+                weatherApi.getWeatherByCity(city, apiKey)
             }
             if (response.isSuccessful) {
-                val list = filterValidCampaigns(response.body()!!)
-                saveCampaigns(list)
+                val list = response.body()!!
+                Timber.d("data -> $list")
+                //saveCampaigns(list)
             } else {
-                throw ApiNetworkException("Fail to get campaigns due to network error")
+                throw ApiNetworkException("Fail to get weather due to network error")
+            }
+        }
+    }
+
+    override suspend fun fetchWeekForecastWeatherList(
+        city: String,
+        apiKey: String,
+        units: String,
+        count: Int
+    ) {
+        withContext(ioDispatcher) {
+            val response = safeApiCall {
+                weatherApi.getWeekForecastWeatherByCity(city, apiKey, units, count)
+            }
+            if (response.isSuccessful) {
+                val list = response.body()!!
+                Timber.d("week forecast data -> $list")
+            } else {
+                throw ApiNetworkException("Fail to get week weather due to network error")
             }
         }
     }
