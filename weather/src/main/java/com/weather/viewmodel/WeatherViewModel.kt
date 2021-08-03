@@ -6,10 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.weather.model.ForecastWeather
 import com.weather.model.WeatherResponseData
 import com.weather.model.server.WeatherStates
-import com.weather.usecase.FetchWeatherByLocationUseCase
-import com.weather.usecase.GetWeakForecastWeatherUseCase
-import com.weather.usecase.GetWeatherListUseCase
-import com.weather.usecase.SearchWeatherByCityNameUseCase
+import com.weather.usecase.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,7 +20,8 @@ class WeatherViewModel @Inject constructor(
     private val getWeatherListUseCase: GetWeatherListUseCase,
     private val searchWeatherByCityNameUseCase: SearchWeatherByCityNameUseCase,
     private val getWeakForecastWeatherUseCase: GetWeakForecastWeatherUseCase,
-    private val fetchWeatherByLocationUseCase: FetchWeatherByLocationUseCase
+    private val fetchWeatherByLocationUseCase: FetchWeatherByLocationUseCase,
+    private val favouritesUseCase: FavouritesUseCase
 ) : ViewModel() {
 
     private val _weatherStateFlow = MutableStateFlow<WeatherStates>(WeatherStates.Loading)
@@ -31,6 +29,7 @@ class WeatherViewModel @Inject constructor(
 
     val weatherForecastLiveData = MutableLiveData<ForecastWeather>()
     val weatherByLocation = MutableLiveData<WeatherResponseData>()
+    val favouritesLiveData = MutableLiveData<Set<String>>()
 
     init {
         getWeather()
@@ -44,10 +43,9 @@ class WeatherViewModel @Inject constructor(
                     _weatherStateFlow.value = WeatherStates.Error(it)
                 }
                 .collect {
-                    if(it.isEmpty()) {
+                    if (it.isEmpty()) {
                         _weatherStateFlow.value = WeatherStates.NoContent
-                    }
-                    else {
+                    } else {
                         _weatherStateFlow.value = WeatherStates.Success(it)
                     }
                 }
@@ -76,6 +74,19 @@ class WeatherViewModel @Inject constructor(
                 "metric"
             )
             weatherByLocation.value = response
+        }
+    }
+
+    fun fetchFavourites() {
+        viewModelScope.launch {
+            favouritesLiveData.value =
+                favouritesUseCase.getFavouriteCities()
+        }
+    }
+
+    fun addFav(cityName: String) {
+        viewModelScope.launch {
+            favouritesUseCase.addFavouriteCity(cityName)
         }
     }
 }

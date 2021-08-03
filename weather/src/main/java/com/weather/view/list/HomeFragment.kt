@@ -16,21 +16,22 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.weather.R
+import com.weather.common.DensityConverter
+import com.weather.common.ItemHorizontalSpaceDecoration
+import com.weather.common.ItemVerticalSpaceDecoration
 import com.weather.databinding.FragmentHomeBinding
-import com.weather.model.Weather
 import com.weather.model.WeatherResponseData
-import com.weather.model.server.WeatherResponse
 import com.weather.viewmodel.WeatherViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 @AndroidEntryPoint
-class HomeFragment : Fragment(), WeatherClickListener {
+class HomeFragment : Fragment(), CityOnclickListener {
 
     private val viewModel: WeatherViewModel by viewModels()
 
     private lateinit var binding: FragmentHomeBinding
-    private lateinit var adapter : WeatherListAdapter
+    private lateinit var adapter : FavouriteCitiesWeatherAdapter
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
@@ -49,7 +50,6 @@ class HomeFragment : Fragment(), WeatherClickListener {
     }
 
     private fun loadCampaignsData() {
-//        viewModel.fetchCampaigns()
         viewModel.fetchForecastWeather("dubai")
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
@@ -71,17 +71,44 @@ class HomeFragment : Fragment(), WeatherClickListener {
                     viewModel.fetchWeatherByLocation(it.latitude.toString(), it.longitude.toString(), "metric")
                 }
             }
+
+        viewModel.favouritesLiveData.observe(viewLifecycleOwner, {
+            showFavCitiesList(it.toList())
+        })
+
+        viewModel.fetchFavourites()
+//        viewModel.addFav("Berlin")
     }
 
     private fun initViewSetup() {
         binding.searchProxy.setOnClickListener {
-            val uri = getString(R.string.deeplink_weather_details).replace("{value}", "true")
+            val uri = getString(R.string.deeplink_weather_details)
+                .replace("{value}", "true")
+                .replace("{city}", "none")
             findNavController().navigate(Uri.parse(uri))
         }
 
         viewModel.weatherByLocation.observe(viewLifecycleOwner, Observer {
             updateUserLocationCard(it)
         })
+
+        adapter = FavouriteCitiesWeatherAdapter(this)
+
+        binding.favCitiesRecyclerView.adapter = adapter
+        binding.favCitiesRecyclerView.addItemDecoration(
+            ItemVerticalSpaceDecoration(
+                DensityConverter.toPixel(
+                    resources, resources.getInteger(R.integer.weather_list_item_vertical_spacing)
+                )
+            )
+        )
+        binding.favCitiesRecyclerView.addItemDecoration(
+            ItemHorizontalSpaceDecoration(
+                DensityConverter.toPixel(
+                    resources, resources.getInteger(R.integer.weather_list_item_horizontal_spacing)
+                )
+            )
+        )
 
         loadCampaignsData()
     }
@@ -94,7 +121,15 @@ class HomeFragment : Fragment(), WeatherClickListener {
         binding.wind.text = response.wind.speed.toString()
     }
 
-    override fun onclick(weather: Weather) {
-        TODO("Not yet implemented")
+    override fun onClick(city: String) {
+        Timber.d(city)
+        val uri = getString(R.string.deeplink_weather_details)
+            .replace("{value}", "false")
+            .replace("{city}", city)
+        findNavController().navigate(Uri.parse(uri))
+    }
+
+    private fun showFavCitiesList(list: List<String>) {
+        adapter.submitList(list)
     }
 }
