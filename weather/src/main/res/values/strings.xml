@@ -5,4 +5,5 @@
     <string name="weather_name_text">Weather Name</string>
     <string name="weather_description_text">Weather Description</string>
     <string name="deeplink_weather_details" translatable="false">weatherapp://weather/details?showSearchBar={value}</string>
+    <string name="search_cities">Search City : Dubai</string>
 </resources>

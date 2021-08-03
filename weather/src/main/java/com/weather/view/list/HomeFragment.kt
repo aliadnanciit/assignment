@@ -50,7 +50,7 @@ class HomeFragment : Fragment(), WeatherClickListener {
 
     private fun loadCampaignsData() {
 //        viewModel.fetchCampaigns()
-        viewModel.fetchForecastWeather()
+        viewModel.fetchForecastWeather("dubai")
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 

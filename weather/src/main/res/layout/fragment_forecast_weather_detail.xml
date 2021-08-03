@@ -6,20 +6,33 @@
     android:layout_height="match_parent"
     tools:context="com.weather.view.list.WeatherListActivity">
 
+
+    <AutoCompleteTextView
+        android:id="@+id/autoCompleteSearchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/search_cities"
+        android:maxLines="1"
+        android:imeOptions="actionDone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/campaignsRecycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:visibility="gone"
-        tools:visibility="visible"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        tools:listitem="@layout/item_weather"
-        tools:itemCount="6"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:spanCount="@integer/number_of_columns" />
+        app:layout_constraintTop_toBottomOf="@id/autoCompleteSearchView"
+        app:spanCount="@integer/number_of_columns"
+        tools:itemCount="6"
+        tools:listitem="@layout/item_weather"
+        tools:visibility="visible" />
 
     <ProgressBar
         android:id="@+id/loadingIndicator"
@@ -34,8 +47,8 @@
         android:id="@+id/noContent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         android:text="No campaign founds"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -60,9 +60,9 @@ class WeatherViewModel @Inject constructor(
         }
     }
 
-    fun fetchForecastWeather() {
+    fun fetchForecastWeather(city: String) {
         viewModelScope.launch {
-            val response = getWeakForecastWeatherUseCase.execute("dubai", "710c6ff29ebad2f6059e31dd6c25923a", "metric")
+            val response = getWeakForecastWeatherUseCase.execute(city, "710c6ff29ebad2f6059e31dd6c25923a", "metric")
             weatherForecastLiveData.value = response
         }
     }
