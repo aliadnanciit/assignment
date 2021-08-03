@@ -6,6 +6,7 @@ import com.weather.database.WeatherEntity
 import com.weather.exception.ApiNetworkException
 import com.weather.model.ForecastWeather
 import com.weather.model.Weather
+import com.weather.model.WeatherResponseData
 import com.weather.model.server.WeatherResponse
 import com.weather.service.WeatherApi
 import kotlinx.coroutines.CoroutineDispatcher
@@ -51,6 +52,19 @@ class WeatherRepositoryImpl @Inject constructor(
                 val list = response.body()!!
                 Timber.d("data -> $list")
                 //saveCampaigns(list)
+            } else {
+                throw ApiNetworkException("Fail to get weather due to network error")
+            }
+        }
+    }
+
+    override suspend fun fetchWeatherByLocation(lat: String, lon: String, apiKey: String) : WeatherResponseData {
+        return withContext(ioDispatcher) {
+            val response = safeApiCall {
+                weatherApi.getWeatherByLocation(lat, lon, apiKey)
+            }
+            if (response.isSuccessful) {
+                response.body()!!
             } else {
                 throw ApiNetworkException("Fail to get weather due to network error")
             }

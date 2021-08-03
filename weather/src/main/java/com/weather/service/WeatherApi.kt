@@ -18,6 +18,14 @@ interface WeatherApi {
         @Query("appid") apiKey: String
     ): Response<WeatherResponseData>
 
+    //https://api.openweathermap.org/data/2.5/weather?lat=37.421851&lon=-122.0841818&appid=710c6ff29ebad2f6059e31dd6c25923a
+    @GET("weather")
+    suspend fun getWeatherByLocation(
+        @Query("lat") lat: String,
+        @Query("lon") lon: String,
+        @Query("appid") apiKey: String
+    ): Response<WeatherResponseData>
+
     @GET("forecast")
     suspend fun getWeekForecastWeatherByCity(
         @Query("q") city: String,
