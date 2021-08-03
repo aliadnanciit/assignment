@@ -1,7 +1,9 @@
 package com.weather.viewmodel
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.weather.model.ForecastWeather
 import com.weather.model.server.WeatherStates
 import com.weather.usecase.GetWeakForecastWeatherUseCase
 import com.weather.usecase.GetWeatherListUseCase
@@ -23,6 +25,8 @@ class WeatherViewModel @Inject constructor(
 
     private val _weatherStateFlow = MutableStateFlow<WeatherStates>(WeatherStates.Loading)
     val weatherStateFlow: StateFlow<WeatherStates> = _weatherStateFlow
+
+    val weatherForecastLiveData = MutableLiveData<ForecastWeather>()
 
     init {
         getWeather()
@@ -52,9 +56,10 @@ class WeatherViewModel @Inject constructor(
         }
     }
 
-    fun fetchWeekWeather() {
+    fun fetchForecastWeather() {
         viewModelScope.launch {
-            getWeakForecastWeatherUseCase.execute("dubai", "710c6ff29ebad2f6059e31dd6c25923a", "metric")
+            val response = getWeakForecastWeatherUseCase.execute("dubai", "710c6ff29ebad2f6059e31dd6c25923a", "metric")
+            weatherForecastLiveData.value = response
         }
     }
 }

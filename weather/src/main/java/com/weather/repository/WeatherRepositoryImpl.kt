@@ -4,6 +4,7 @@ import com.weather.common.safeApiCall
 import com.weather.database.WeatherDao
 import com.weather.database.WeatherEntity
 import com.weather.exception.ApiNetworkException
+import com.weather.model.ForecastWeather
 import com.weather.model.Weather
 import com.weather.model.server.WeatherResponse
 import com.weather.service.WeatherApi
@@ -61,14 +62,13 @@ class WeatherRepositoryImpl @Inject constructor(
         apiKey: String,
         units: String,
         count: Int
-    ) {
-        withContext(ioDispatcher) {
+    ) : ForecastWeather {
+        return withContext(ioDispatcher) {
             val response = safeApiCall {
                 weatherApi.getWeekForecastWeatherByCity(city, apiKey, units, count)
             }
             if (response.isSuccessful) {
-                val list = response.body()!!
-                Timber.d("week forecast data -> $list")
+                response.body()!!
             } else {
                 throw ApiNetworkException("Fail to get week weather due to network error")
             }
