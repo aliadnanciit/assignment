@@ -3,7 +3,8 @@
     <string name="error_internet_connection">There was an error. Please check your internet connection and try again.</string>
     <string name="text_retry">Retry</string>
     <string name="weather_name_text">Weather Name</string>
+    <string name="city_name_text">City Name</string>
     <string name="weather_description_text">Weather Description</string>
-    <string name="deeplink_weather_details" translatable="false">weatherapp://weather/details?showSearchBar={value}</string>
+    <string name="deeplink_weather_details" translatable="false">weatherapp://weather/details?showSearchBar={value}&amp;city={city}</string>
     <string name="search_cities">Search City : Dubai</string>
 </resources>

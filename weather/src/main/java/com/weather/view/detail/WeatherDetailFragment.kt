@@ -62,6 +62,13 @@ class WeatherDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        arguments?.let {
+            if(it.getString("city") != "none") {
+                selectedCity = it.getString("city")!!
+            }
+        }
+
         if (showSearchBar()) {
             cities = requireActivity().resources.getStringArray(R.array.cities)
             initViewSetup()

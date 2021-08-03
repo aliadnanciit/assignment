@@ -41,7 +41,7 @@ data class ListItem(
     @Json(name = "dt")
     val dt: Int = 0,
     @Json(name = "pop")
-    val pop: Int = 0,
+    val pop: Float = 0.0f,
     @Json(name = "visibility")
     val visibility: Int = 0,
     @Json(name = "dt_txt")
