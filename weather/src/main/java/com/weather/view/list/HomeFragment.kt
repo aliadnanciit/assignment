@@ -18,6 +18,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.weather.R
 import com.weather.databinding.FragmentHomeBinding
+import com.weather.model.FavCityWeatherState
 import com.weather.model.UserWeatherState
 import com.weather.model.WeatherResponseData
 import com.weather.viewmodel.WeatherViewModel
@@ -32,7 +33,7 @@ class HomeFragment : Fragment(), CityOnclickListener {
     private val viewModel: WeatherViewModel by viewModels()
 
     private lateinit var binding: FragmentHomeBinding
-    private lateinit var adapter : FavouriteCitiesWeatherAdapter
+    private lateinit var adapter: FavouriteCitiesWeatherAdapter
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
@@ -56,7 +57,20 @@ class HomeFragment : Fragment(), CityOnclickListener {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
         viewModel.favouritesLiveData.observe(viewLifecycleOwner, {
-            showFavCitiesList(it.toList())
+            it?.let { favCityWeatherState ->
+                binding.favCitiesRecyclerView.visibility = View.GONE
+                binding.addFavCityContainer.visibility = View.GONE
+
+                when (favCityWeatherState) {
+                    is FavCityWeatherState.Success -> {
+                        binding.favCitiesRecyclerView.visibility = View.VISIBLE
+                        showFavCitiesList(favCityWeatherState.results.toList())
+                    }
+                    is FavCityWeatherState.NoFavList -> {
+                        binding.addFavCityContainer.visibility = View.VISIBLE
+                    }
+                }
+            }
         })
 
         viewModel.fetchFavourites()
@@ -100,7 +114,7 @@ class HomeFragment : Fragment(), CityOnclickListener {
                 binding.locationBasedWeather.visibility = View.GONE
                 binding.userWeatherLoading.visibility = View.GONE
                 binding.userWeatherPermission.visibility = View.GONE
-                when(userWeatherState) {
+                when (userWeatherState) {
                     is UserWeatherState.Success -> {
                         updateUserLocationCard(userWeatherState.results)
                     }
@@ -115,7 +129,6 @@ class HomeFragment : Fragment(), CityOnclickListener {
                     }
                 }
             }
-
         })
 
         adapter = FavouriteCitiesWeatherAdapter(this)
@@ -133,6 +146,10 @@ class HomeFragment : Fragment(), CityOnclickListener {
         binding.permissionButton.setOnClickListener {
             showPermissionDialog()
         }
+
+        binding.addFavCityButton.setOnClickListener {
+            showSearchFavCity("none", true)
+        }
     }
 
     private fun updateUserLocationCard(response: WeatherResponseData) {
@@ -145,8 +162,12 @@ class HomeFragment : Fragment(), CityOnclickListener {
 
     override fun onClick(city: String) {
         Timber.d(city)
+        showSearchFavCity(city, false)
+    }
+
+    private fun showSearchFavCity(city: String, showSearch: Boolean) {
         val uri = getString(R.string.deeplink_weather_details)
-            .replace("{value}", "false")
+            .replace("{value}", "$showSearch")
             .replace("{city}", city)
         findNavController().navigate(Uri.parse(uri))
     }
@@ -173,8 +194,7 @@ class HomeFragment : Fragment(), CityOnclickListener {
                 && grantResults.first() == PackageManager.PERMISSION_GRANTED
             ) {
                 findLocation()
-            }
-            else {
+            } else {
                 viewModel.needLocationPermission()
             }
         }

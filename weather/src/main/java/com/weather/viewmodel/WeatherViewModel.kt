@@ -3,6 +3,7 @@ package com.weather.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.weather.model.FavCityWeatherState
 import com.weather.model.ForecastWeather
 import com.weather.model.UserWeatherState
 import com.weather.model.WeatherResponseData
@@ -30,7 +31,8 @@ class WeatherViewModel @Inject constructor(
 
     val weatherForecastLiveData = MutableLiveData<ForecastWeather>()
     val weatherByLocation = MutableLiveData<UserWeatherState<WeatherResponseData>>(UserWeatherState.Loading)
-    val favouritesLiveData = MutableLiveData<Set<String>>()
+
+    val favouritesLiveData = MutableLiveData<FavCityWeatherState<Set<String>>>(FavCityWeatherState.NoFavList)
 
 
     init {
@@ -83,8 +85,12 @@ class WeatherViewModel @Inject constructor(
 
     fun fetchFavourites() {
         viewModelScope.launch {
-            favouritesLiveData.value =
-                favouritesUseCase.getFavouriteCities()
+            val response = favouritesUseCase.getFavouriteCities()
+            favouritesLiveData.value = if (response.isNotEmpty()) {
+                FavCityWeatherState.Success(response)
+            } else {
+                FavCityWeatherState.NoFavList
+            }
         }
     }
 
