@@ -20,6 +20,10 @@
             </intent-filter>
         </activity>
 
+
+        <activity android:name="com.weather.view.detail.WeatherDetailActivity" />
+        <activity android:name="com.weather.view.list.WeatherListActivity" />
+
     </application>
 
 </manifest>

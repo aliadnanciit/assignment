@@ -6,7 +6,7 @@
     app:startDestination="@+id/home_dest">
     <fragment
         android:id="@+id/home_dest"
-        android:name="com.assignment.view.MainFragment"
+        android:name="com.weather.view.list.HomeFragment"
         tools:layout="@layout/fragment_main">
     </fragment>
 </navigation>
