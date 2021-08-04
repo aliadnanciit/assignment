@@ -30,8 +30,10 @@ class WeatherViewModel @Inject constructor(
         }
     }
 
-    fun fetchWeatherByLocation(lat: String, lon: String, units: String) {
-        weatherByLocation.value = UserWeatherState.Loading
+    fun fetchWeatherByLocation(lat: String, lon: String) {
+        if(weatherByLocation.value != null && (weatherByLocation.value is UserWeatherState.Success).not()) {
+            weatherByLocation.value = UserWeatherState.Loading
+        }
 
         viewModelScope.launch {
             val response = fetchWeatherByLocationUseCase.execute(lat, lon)

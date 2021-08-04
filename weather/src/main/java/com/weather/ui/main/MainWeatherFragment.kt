@@ -52,25 +52,25 @@ class MainWeatherFragment : Fragment(), CityOnclickListener {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMainWeatherBinding.inflate(layoutInflater)
+        initViewSetup()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        initViewSetup()
-    }
-
-    private fun loadData() {
-        viewModel.fetchForecastWeather("dubai")
-
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
+        viewModel.weatherByLocation.observe(viewLifecycleOwner, Observer {
+            updateTodayWeatherView(it)
+        })
+        weatherSettingViewModel.showTempInDegree.observe(viewLifecycleOwner, Observer {
+            binding.tempDegree.isChecked = it
+            updateTodayWeatherView(viewModel.weatherByLocation.value)
+        })
         favCityWeatherViewModel.favouritesLiveData.observe(viewLifecycleOwner, {
             it?.let { favCityWeatherState ->
                 binding.favCitiesRecyclerView.visibility = View.GONE
                 binding.addFavCityContainer.visibility = View.GONE
-
                 when (favCityWeatherState) {
                     is FavCityWeatherState.Success -> {
                         binding.favCitiesRecyclerView.visibility = View.VISIBLE
@@ -83,8 +83,11 @@ class MainWeatherFragment : Fragment(), CityOnclickListener {
             }
         })
 
+        loadData()
         favCityWeatherViewModel.fetch()
+    }
 
+    private fun loadData() {
         if (
             ActivityCompat.checkSelfPermission(
                 requireActivity(),
@@ -102,11 +105,7 @@ class MainWeatherFragment : Fragment(), CityOnclickListener {
         fusedLocationClient.lastLocation
             .addOnSuccessListener { location: Location? ->
                 location?.let {
-                    viewModel.fetchWeatherByLocation(
-                        it.latitude.toString(),
-                        it.longitude.toString(),
-                        "metric"
-                    )
+                    viewModel.fetchWeatherByLocation(it.latitude.toString(), it.longitude.toString())
                 }
             }
     }
@@ -115,30 +114,16 @@ class MainWeatherFragment : Fragment(), CityOnclickListener {
         binding.searchProxy.setOnClickListener {
             showSearchFavCity("none", true)
         }
-
-        viewModel.weatherByLocation.observe(viewLifecycleOwner, Observer {
-            updateTodayWeatherView(it)
-        })
-
-        weatherSettingViewModel.showTempInDegree.observe(viewLifecycleOwner, Observer {
-            binding.tempDegree.isChecked = it
-            updateTodayWeatherView(viewModel.weatherByLocation.value)
-        })
-
         adapter = FavouriteCitiesWeatherAdapter(this)
         binding.favCitiesRecyclerView.adapter = adapter
-        loadData()
-
         binding.tempDegree.setOnClickListener {
             weatherSettingViewModel.toggleSelection()
         }
         binding.tempDegree.isChecked = weatherSettingViewModel.showTempInDegree.value!!
         updateTodayWeatherView(viewModel.weatherByLocation.value)
-
         binding.permissionButton.setOnClickListener {
             showPermissionDialog()
         }
-
         binding.addFavCityButton.setOnClickListener {
             showSearchFavCity("none", true)
         }
