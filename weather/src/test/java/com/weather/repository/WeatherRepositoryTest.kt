@@ -92,7 +92,7 @@ class WeatherRepositoryTest {
         coEvery { weatherDto.image} returns imageDto
         coEvery { imageDto.url } returns ""
 
-        repository.fetchWeatherList()
+//        repository.fetchWeatherList()
 
         coVerify {
             weatherApi.getCampaigns()
