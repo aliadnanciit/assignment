@@ -58,7 +58,9 @@ class WeatherDetailFragment : Fragment() {
 //            )
 //        )
         binding.addAsFavCity.setOnClickListener {
-            viewModel.addFav(binding.cityName.text.toString())
+            if(binding.cityName.text.toString().isNotEmpty()) {
+                viewModel.addFav(binding.cityName.text.toString())
+            }
         }
         return binding.root
     }
