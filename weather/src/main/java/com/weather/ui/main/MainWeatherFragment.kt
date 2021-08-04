@@ -1,4 +1,4 @@
-package com.weather.ui.list
+package com.weather.ui.main
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -19,7 +19,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.weather.R
 import com.weather.common.TemperatureUtil
-import com.weather.databinding.FragmentHomeBinding
+import com.weather.databinding.FragmentMainWeatherBinding
 import com.weather.model.FavCityWeatherState
 import com.weather.model.UserWeatherState
 import com.weather.model.WeatherResponseData
@@ -33,13 +33,13 @@ import javax.inject.Inject
 const val PERMISSIONS_REQUEST_ACCESS_LOCATION: Int = 123
 
 @AndroidEntryPoint
-class HomeFragment : Fragment(), CityOnclickListener {
+class MainWeatherFragment : Fragment(), CityOnclickListener {
 
     private val viewModel: WeatherViewModel by viewModels()
     private val favCityWeatherViewModel: FavCityWeatherViewModel by viewModels()
     private val weatherSettingViewModel: WeatherSettingViewModel by activityViewModels()
 
-    private lateinit var binding: FragmentHomeBinding
+    private lateinit var binding: FragmentMainWeatherBinding
     private lateinit var adapter: FavouriteCitiesWeatherAdapter
 
     @Inject
@@ -51,7 +51,7 @@ class HomeFragment : Fragment(), CityOnclickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentHomeBinding.inflate(layoutInflater)
+        binding = FragmentMainWeatherBinding.inflate(layoutInflater)
         return binding.root
     }
 

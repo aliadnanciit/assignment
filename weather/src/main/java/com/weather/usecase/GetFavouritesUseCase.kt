@@ -9,8 +9,4 @@ class GetFavouritesUseCase @Inject constructor(
     fun execute(): Set<String> {
         return favouritesRepository.getFavouriteCities()
     }
-
-    fun addFavouriteCity(city: String) {
-        favouritesRepository.addFavouriteCity(city)
-    }
 }
