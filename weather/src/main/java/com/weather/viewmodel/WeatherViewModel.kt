@@ -46,6 +46,6 @@ class WeatherViewModel @Inject constructor(
     }
 
     fun scheduleNotification(city: String) {
-        weatherNotificationUseCase.scheduleNotification(city, "BuildConfig.API_KEY")
+        weatherNotificationUseCase.scheduleNotification(city)
     }
 }

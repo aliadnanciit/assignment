@@ -15,7 +15,6 @@ import java.util.concurrent.TimeUnit
 import kotlin.random.Random
 
 internal const val CITY_NAME = "city_name"
-internal const val API_KEY = "api_key"
 internal const val WORK_NAME = "notification"
 
 class DailyNotificationWorker(
@@ -26,8 +25,7 @@ class DailyNotificationWorker(
 
     override suspend fun doWork(): Result {
         val city = inputData.getString(CITY_NAME)
-        val apiKey = inputData.getString(API_KEY)
-        if (city.isNullOrBlank() || apiKey.isNullOrBlank()) {
+        if (city.isNullOrBlank()) {
             return Result.failure()
         }
         val notificationTitle: String
@@ -37,7 +35,7 @@ class DailyNotificationWorker(
             notificationText = weather?.first()?.description
         }
 
-        reScheduleNotification(context, city, apiKey)
+        reScheduleNotification(context, city)
 
         return notificationText?.let {
             val builder = NotificationCompat.Builder(context, CHANNEL_ID)
@@ -52,10 +50,9 @@ class DailyNotificationWorker(
         } ?: run { Result.failure() }
     }
 
-    private fun reScheduleNotification(context: Context, city: String, apiKey: String) {
+    private fun reScheduleNotification(context: Context, city: String) {
         val data = Data.Builder()
             .putString(CITY_NAME, city)
-            .putString(API_KEY, apiKey)
             .build()
 
         val constraints = Constraints.Builder()

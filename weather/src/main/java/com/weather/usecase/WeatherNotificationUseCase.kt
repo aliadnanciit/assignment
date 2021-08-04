@@ -4,7 +4,6 @@ import androidx.work.*
 import com.assignment.base.RESCHEDULE_HOUR
 import com.assignment.base.RESCHEDULE_MIN
 import com.assignment.base.RESCHEDULE_SEC
-import com.weather.notifications.API_KEY
 import com.weather.notifications.CITY_NAME
 import com.weather.notifications.DailyNotificationWorker
 import java.util.*
@@ -16,10 +15,9 @@ private const val WORK_NAME = "notification"
 class WeatherNotificationUseCase @Inject constructor(
     private val workManager: WorkManager
 ) {
-    fun scheduleNotification(city: String, apiKey: String) {
+    fun scheduleNotification(city: String) {
         val data = Data.Builder()
             .putString(CITY_NAME, city)
-            .putString(API_KEY, apiKey)
             .build()
 
         val constraints = Constraints.Builder()
@@ -31,6 +29,10 @@ class WeatherNotificationUseCase @Inject constructor(
         dueDate.set(Calendar.HOUR_OF_DAY, RESCHEDULE_HOUR) // at 6 am
         dueDate.set(Calendar.MINUTE, RESCHEDULE_MIN)
         dueDate.set(Calendar.SECOND, RESCHEDULE_SEC)
+
+        if(dueDate.before(currentDate)) {
+            dueDate.add(Calendar.HOUR_OF_DAY, 24) // schedule for next day
+        }
 
         val timeDiff = dueDate.timeInMillis - currentDate.timeInMillis
         val dailyWorkRequest = OneTimeWorkRequestBuilder<DailyNotificationWorker>()
