@@ -1,16 +1,13 @@
 package com.weather.ui.detail
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import com.weather.R
 import com.weather.common.TemperatureUtil
 import com.weather.databinding.FragmentForecastWeatherDetailBinding
 import com.weather.model.ListItem
@@ -24,28 +21,25 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class WeatherDetailFragment : Fragment() {
 
+    @Inject
+    lateinit var temperatureUtil: TemperatureUtil
+
     private val viewModel: WeatherViewModel by viewModels()
     private val faveCityWeatherViewModel: FavCityWeatherViewModel by viewModels()
     private val weatherSettingViewModel: WeatherSettingViewModel by activityViewModels()
 
-    @Inject
-    lateinit var temperatureUtil: TemperatureUtil
-
-    private lateinit var cities : Array<String>
-    private var selectedCity: String? = null
-    private val defaultCity = "Dubai"
-
-
+    private var paramCity: String? = null
     private lateinit var binding: FragmentForecastWeatherDetailBinding
     private lateinit var adapter: ForecastWeatherListAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentForecastWeatherDetailBinding.inflate(layoutInflater)
 
-        binding.retry.setOnClickListener {
-            loadForecastWeatherData(selectedCity)
+        binding.searchCityWeather.setOnClickListener {
+            loadForecastWeatherData(binding.autoCompleteSearchView.text.toString())
         }
         adapter = ForecastWeatherListAdapter(
             temperatureUtil,
@@ -66,60 +60,41 @@ class WeatherDetailFragment : Fragment() {
 
         arguments?.let {
             if(it.getString("city") != "none") {
-                selectedCity = it.getString("city")!!
+                paramCity = it.getString("city")!!
             }
         }
 
-        if (showSearchBar()) {
-            cities = requireActivity().resources.getStringArray(R.array.cities)
-            initViewSetup()
-        } else {
-            binding.autoCompleteSearchView.visibility = View.GONE
+        val visibility = if (paramCity == null) {
+            View.VISIBLE
         }
+        else {
+            View.GONE
+        }
+        binding.searchPanel.visibility = visibility
+
         viewModel.weatherForecastLiveData.observe(viewLifecycleOwner, Observer { forecastWeather ->
             forecastWeather.list?.let { list ->
                 showDate(forecastWeather.city.name, list)
             }
         })
-        loadForecastWeatherData(selectedCity)
-    }
-
-    private fun showSearchBar(): Boolean {
-        arguments?.let {
-            return it.getString("value")?.toBoolean() ?: false
-        }
-        return false
-    }
-
-    private fun initViewSetup() {
-        val adapter = ArrayAdapter(requireActivity(), android.R.layout.select_dialog_item, cities)
-        binding.autoCompleteSearchView.threshold = 1
-        binding.autoCompleteSearchView.setAdapter(adapter)
-        binding.autoCompleteSearchView.setTextColor(Color.RED)
-
-        binding.autoCompleteSearchView.setOnItemClickListener { parent, view, position, id ->
-            loadForecastWeatherData(cities[position])
-        }
+        loadForecastWeatherData(paramCity)
     }
 
     private fun loadForecastWeatherData(city: String?) {
-        binding.loadingIndicator.visibility = View.GONE
-        binding.errorContainer.visibility = View.GONE
         city?.let {
-            viewModel.fetchForecastWeather(it)
-        } ?:   viewModel.fetchForecastWeather(defaultCity)
+            if(it.isNotEmpty()) {
+                viewModel.fetchForecastWeather(it)
+            }
+        }
     }
 
     private fun showDate(city: String, list: List<ListItem>) {
-        binding.loadingIndicator.visibility = View.GONE
-        binding.errorContainer.visibility = View.GONE
-        binding.noContent.visibility = View.GONE
-        binding.weatherRecyclerView.visibility = View.GONE
-
-        binding.cityInfoContainer.visibility = View.VISIBLE
-        binding.cityName.text = ""
-
+        binding.cityName.text = city
         binding.weatherRecyclerView.visibility = View.VISIBLE
+        binding.cityInfoContainer.visibility = View.VISIBLE
+        if(paramCity == null) {
+            binding.addAsFavCity.visibility = View.VISIBLE
+        }
         adapter.submitList(list)
     }
 }
