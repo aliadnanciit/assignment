@@ -38,25 +38,28 @@ class WeatherDetailFragment : Fragment() {
         binding = FragmentForecastWeatherDetailBinding.inflate(layoutInflater)
 
         binding.retry.setOnClickListener {
-            loadForecstWeatherData(selectedCity)
+            loadForecastWeatherData(selectedCity)
         }
         adapter = ForecastWeatherListAdapter()
 
-        binding.campaignsRecycler.adapter = adapter
-        binding.campaignsRecycler.addItemDecoration(
-            ItemVerticalSpaceDecoration(
-                DensityConverter.toPixel(
-                    resources, resources.getInteger(R.integer.weather_list_item_vertical_spacing)
-                )
-            )
-        )
-        binding.campaignsRecycler.addItemDecoration(
-            ItemHorizontalSpaceDecoration(
-                DensityConverter.toPixel(
-                    resources, resources.getInteger(R.integer.weather_list_item_horizontal_spacing)
-                )
-            )
-        )
+        binding.weatherRecyclerView.adapter = adapter
+//        binding.weatherRecyclerView.addItemDecoration(
+//            ItemVerticalSpaceDecoration(
+//                DensityConverter.toPixel(
+//                    resources, resources.getInteger(R.integer.weather_list_item_vertical_spacing)
+//                )
+//            )
+//        )
+//        binding.weatherRecyclerView.addItemDecoration(
+//            ItemHorizontalSpaceDecoration(
+//                DensityConverter.toPixel(
+//                    resources, resources.getInteger(R.integer.weather_list_item_horizontal_spacing)
+//                )
+//            )
+//        )
+        binding.addAsFavCity.setOnClickListener {
+            viewModel.addFav(binding.cityName.text.toString())
+        }
         return binding.root
     }
 
@@ -75,10 +78,9 @@ class WeatherDetailFragment : Fragment() {
         } else {
             binding.autoCompleteSearchView.visibility = View.GONE
         }
-
-        viewModel.weatherForecastLiveData.observe(viewLifecycleOwner, Observer {
-            it.list?.let { list ->
-                showDate(list)
+        viewModel.weatherForecastLiveData.observe(viewLifecycleOwner, Observer { forecastWeather ->
+            forecastWeather.list?.let { list ->
+                showDate(forecastWeather.city.name, list)
             }
         })
 
@@ -89,7 +91,7 @@ class WeatherDetailFragment : Fragment() {
 //                }
 //            }
 //        }
-        loadForecstWeatherData(selectedCity)
+        loadForecastWeatherData(selectedCity)
     }
 
     private fun showSearchBar(): Boolean {
@@ -103,7 +105,7 @@ class WeatherDetailFragment : Fragment() {
         binding.loadingIndicator.visibility = View.GONE
         binding.errorContainer.visibility = View.GONE
         binding.noContent.visibility = View.GONE
-        binding.campaignsRecycler.visibility = View.GONE
+        binding.weatherRecyclerView.visibility = View.GONE
         when (weatherState) {
             is WeatherStates.Loading -> {
                 binding.loadingIndicator.visibility = View.VISIBLE
@@ -112,7 +114,7 @@ class WeatherDetailFragment : Fragment() {
                 binding.noContent.visibility = View.VISIBLE
             }
             is WeatherStates.Success -> {
-                binding.campaignsRecycler.visibility = View.VISIBLE
+                binding.weatherRecyclerView.visibility = View.VISIBLE
 //                showDate(weatherState.list)
             }
             is WeatherStates.Error -> {
@@ -128,11 +130,11 @@ class WeatherDetailFragment : Fragment() {
         binding.autoCompleteSearchView.setTextColor(Color.RED)
 
         binding.autoCompleteSearchView.setOnItemClickListener { parent, view, position, id ->
-            loadForecstWeatherData(cities[position])
+            loadForecastWeatherData(cities[position])
         }
     }
 
-    private fun loadForecstWeatherData(city: String?) {
+    private fun loadForecastWeatherData(city: String?) {
         binding.loadingIndicator.visibility = View.GONE
         binding.errorContainer.visibility = View.GONE
         city?.let {
@@ -140,13 +142,16 @@ class WeatherDetailFragment : Fragment() {
         } ?:   viewModel.fetchForecastWeather(defaultCity)
     }
 
-    private fun showDate(list: List<ListItem>) {
+    private fun showDate(city: String, list: List<ListItem>) {
         binding.loadingIndicator.visibility = View.GONE
         binding.errorContainer.visibility = View.GONE
         binding.noContent.visibility = View.GONE
-        binding.campaignsRecycler.visibility = View.GONE
+        binding.weatherRecyclerView.visibility = View.GONE
 
-        binding.campaignsRecycler.visibility = View.VISIBLE
+        binding.cityInfoContainer.visibility = View.VISIBLE
+        binding.cityName.text = ""
+
+        binding.weatherRecyclerView.visibility = View.VISIBLE
         adapter.submitList(list)
     }
 }

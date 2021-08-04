@@ -139,6 +139,7 @@
                     android:id="@+id/wind"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp"
                     android:layout_marginVertical="4dp"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/text_color"

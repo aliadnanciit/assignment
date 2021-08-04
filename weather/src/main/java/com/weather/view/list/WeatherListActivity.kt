@@ -38,15 +38,15 @@ class WeatherListActivity : AppCompatActivity(), WeatherClickListener {
         }
         adapter = WeatherListAdapter(this)
 
-        binding.campaignsRecycler.adapter = adapter
-        binding.campaignsRecycler.addItemDecoration(
+        binding.weatherRecyclerView.adapter = adapter
+        binding.weatherRecyclerView.addItemDecoration(
             ItemVerticalSpaceDecoration(
                 DensityConverter.toPixel(
                     resources, resources.getInteger(R.integer.weather_list_item_vertical_spacing)
                 )
             )
         )
-        binding.campaignsRecycler.addItemDecoration(
+        binding.weatherRecyclerView.addItemDecoration(
             ItemHorizontalSpaceDecoration(
                 DensityConverter.toPixel(
                     resources, resources.getInteger(R.integer.weather_list_item_horizontal_spacing)
@@ -69,7 +69,7 @@ class WeatherListActivity : AppCompatActivity(), WeatherClickListener {
         binding.loadingIndicator.visibility = View.GONE
         binding.errorContainer.visibility = View.GONE
         binding.noContent.visibility = View.GONE
-        binding.campaignsRecycler.visibility = View.GONE
+        binding.weatherRecyclerView.visibility = View.GONE
         when(weatherState) {
             is WeatherStates.Loading -> {
                 binding.loadingIndicator.visibility = View.VISIBLE
@@ -78,7 +78,7 @@ class WeatherListActivity : AppCompatActivity(), WeatherClickListener {
                 binding.noContent.visibility = View.VISIBLE
             }
             is WeatherStates.Success -> {
-                binding.campaignsRecycler.visibility = View.VISIBLE
+                binding.weatherRecyclerView.visibility = View.VISIBLE
                 showDate(weatherState.list)
             }
             is WeatherStates.Error -> {
