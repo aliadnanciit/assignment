@@ -7,20 +7,29 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.weather.R
+import com.weather.common.TemperatureUtil
 import com.weather.databinding.FragmentForecastWeatherDetailBinding
 import com.weather.model.ListItem
 import com.weather.model.server.WeatherStates
+import com.weather.viewmodel.WeatherSettingViewModel
 import com.weather.viewmodel.WeatherViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
 class WeatherDetailFragment : Fragment() {
 
     private val viewModel: WeatherViewModel by viewModels()
+    private val weatherSettingViewModel: WeatherSettingViewModel by activityViewModels()
+
+    @Inject
+    lateinit var temperatureUtil: TemperatureUtil
+
     private lateinit var cities : Array<String>
     private var selectedCity: String? = null
     private val defaultCity = "Dubai"
@@ -37,7 +46,10 @@ class WeatherDetailFragment : Fragment() {
         binding.retry.setOnClickListener {
             loadForecastWeatherData(selectedCity)
         }
-        adapter = ForecastWeatherListAdapter()
+        adapter = ForecastWeatherListAdapter(
+            temperatureUtil,
+            weatherSettingViewModel.showTempInDegree.value!!
+        )
 
         binding.weatherRecyclerView.adapter = adapter
         binding.addAsFavCity.setOnClickListener {

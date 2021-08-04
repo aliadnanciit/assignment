@@ -11,19 +11,23 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.weather.R
+import com.weather.common.TemperatureUtil
 import com.weather.databinding.FragmentHomeBinding
 import com.weather.model.FavCityWeatherState
 import com.weather.model.UserWeatherState
 import com.weather.model.WeatherResponseData
+import com.weather.viewmodel.WeatherSettingViewModel
 import com.weather.viewmodel.WeatherViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+import javax.inject.Inject
 
 const val PERMISSIONS_REQUEST_ACCESS_LOCATION: Int = 123
 
@@ -31,9 +35,13 @@ const val PERMISSIONS_REQUEST_ACCESS_LOCATION: Int = 123
 class HomeFragment : Fragment(), CityOnclickListener {
 
     private val viewModel: WeatherViewModel by viewModels()
+    private val weatherSettingViewModel: WeatherSettingViewModel by activityViewModels()
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var adapter: FavouriteCitiesWeatherAdapter
+
+    @Inject
+    lateinit var temperatureUtil: TemperatureUtil
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
@@ -107,39 +115,23 @@ class HomeFragment : Fragment(), CityOnclickListener {
         }
 
         viewModel.weatherByLocation.observe(viewLifecycleOwner, Observer {
-            it?.let { userWeatherState ->
-                binding.locationBasedWeather.visibility = View.GONE
-                binding.userWeatherLoading.visibility = View.GONE
-                binding.userWeatherPermission.visibility = View.GONE
-                when (userWeatherState) {
-                    is UserWeatherState.Success -> {
-                        updateUserLocationCard(userWeatherState.results)
-                        viewModel.scheduleNotification(userWeatherState.results.name)
-                    }
-                    is UserWeatherState.Error -> {
+            updateTodayWeatherView(it)
+        })
 
-                    }
-                    is UserWeatherState.Loading -> {
-                        binding.userWeatherLoading.visibility = View.VISIBLE
-                    }
-                    is UserWeatherState.PermissionRequired -> {
-                        binding.userWeatherPermission.visibility = View.VISIBLE
-                    }
-                }
-            }
+        weatherSettingViewModel.showTempInDegree.observe(viewLifecycleOwner, Observer {
+            binding.tempDegree.isChecked = it
+            updateTodayWeatherView(viewModel.weatherByLocation.value)
         })
 
         adapter = FavouriteCitiesWeatherAdapter(this)
         binding.favCitiesRecyclerView.adapter = adapter
         loadCampaignsData()
 
-        binding.tempDegree.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                // The toggle is enabled
-            } else {
-                // The toggle is disabled
-            }
+        binding.tempDegree.setOnClickListener {
+            weatherSettingViewModel.toggleSelection()
         }
+        binding.tempDegree.isChecked = weatherSettingViewModel.showTempInDegree.value!!
+        updateTodayWeatherView(viewModel.weatherByLocation.value)
 
         binding.permissionButton.setOnClickListener {
             showPermissionDialog()
@@ -150,11 +142,38 @@ class HomeFragment : Fragment(), CityOnclickListener {
         }
     }
 
+    private fun updateTodayWeatherView(it: UserWeatherState<WeatherResponseData>?) {
+        it?.let { userWeatherState ->
+            binding.locationBasedWeather.visibility = View.GONE
+            binding.userWeatherLoading.visibility = View.GONE
+            binding.userWeatherPermission.visibility = View.GONE
+            when (userWeatherState) {
+                is UserWeatherState.Success -> {
+                    updateUserLocationCard(userWeatherState.results)
+//                    viewModel.scheduleNotification(userWeatherState.results.name)
+                }
+                is UserWeatherState.Error -> {
+
+                }
+                is UserWeatherState.Loading -> {
+                    binding.userWeatherLoading.visibility = View.VISIBLE
+                }
+                is UserWeatherState.PermissionRequired -> {
+                    binding.userWeatherPermission.visibility = View.VISIBLE
+                }
+            }
+        }
+    }
+
     private fun updateUserLocationCard(response: WeatherResponseData) {
         binding.locationBasedWeather.visibility = View.VISIBLE
         binding.name.text = response.name
         binding.humidity.text = response.main.humidity.toString()
-        binding.temperature.text = response.main.temp.toString()
+        binding.temperature.text = if(weatherSettingViewModel.showTempInDegree.value!!) {
+            temperatureUtil.convertToDegree(response.main.temp)
+        } else {
+            temperatureUtil.convertToFarenheit(response.main.temp)
+        }
         binding.wind.text = response.wind.speed.toString()
     }
 

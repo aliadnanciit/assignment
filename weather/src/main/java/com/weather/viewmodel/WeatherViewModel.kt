@@ -36,7 +36,6 @@ class WeatherViewModel @Inject constructor(
 
     val favouritesLiveData = MutableLiveData<FavCityWeatherState<Set<String>>>(FavCityWeatherState.NoFavList)
 
-
     init {
         getWeather()
     }
@@ -79,7 +78,7 @@ class WeatherViewModel @Inject constructor(
                 lat,
                 lon,
                 BuildConfig.API_KEY,
-                "metric"
+                "imperial"
             )
             weatherByLocation.value = UserWeatherState.Success(response)
         }
