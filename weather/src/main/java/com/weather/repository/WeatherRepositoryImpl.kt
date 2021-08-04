@@ -17,10 +17,10 @@ class WeatherRepositoryImpl @Inject constructor(
     @Named("IO_DISPATCHER") private val ioDispatcher: CoroutineDispatcher
 ) : WeatherRepository {
 
-    override suspend fun fetchWeatherList(city: String, apiKey: String): WeatherResponseData {
+    override suspend fun fetchWeatherList(city: String): WeatherResponseData {
         return withContext(ioDispatcher) {
             val response = safeApiCall {
-                weatherApi.getWeatherByCity(city, apiKey)
+                weatherApi.getWeatherByCity(city)
             }
             if (response.isSuccessful) {
                 response.body()!!
@@ -30,10 +30,10 @@ class WeatherRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun fetchWeatherByLocation(lat: String, lon: String, apiKey: String) : WeatherResponseData {
+    override suspend fun fetchWeatherByLocation(lat: String, lon: String) : WeatherResponseData {
         return withContext(ioDispatcher) {
             val response = safeApiCall {
-                weatherApi.getWeatherByLocation(lat, lon, apiKey)
+                weatherApi.getWeatherByLocation(lat, lon)
             }
             if (response.isSuccessful) {
                 response.body()!!
@@ -45,13 +45,11 @@ class WeatherRepositoryImpl @Inject constructor(
 
     override suspend fun fetchWeekForecastWeatherList(
         city: String,
-        apiKey: String,
-        units: String,
         count: Int
     ) : ForecastWeather {
         return withContext(ioDispatcher) {
             val response = safeApiCall {
-                weatherApi.getWeekForecastWeatherByCity(city, apiKey, units, count)
+                weatherApi.getWeekForecastWeatherByCity(city, count)
             }
             if (response.isSuccessful) {
                 response.body()!!

@@ -8,7 +8,7 @@ class SearchWeatherByCityNameUseCase @Inject constructor(
     private val weatherRepository: WeatherRepository
 ) {
 
-    suspend fun execute(city: String, apiKey: String): WeatherResponseData {
-        return weatherRepository.fetchWeatherList(city, apiKey)
+    suspend fun execute(city: String): WeatherResponseData {
+        return weatherRepository.fetchWeatherList(city)
     }
 }

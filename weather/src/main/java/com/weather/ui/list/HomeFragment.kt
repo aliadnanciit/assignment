@@ -1,4 +1,4 @@
-package com.weather.view.list
+package com.weather.ui.list
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -23,6 +23,7 @@ import com.weather.databinding.FragmentHomeBinding
 import com.weather.model.FavCityWeatherState
 import com.weather.model.UserWeatherState
 import com.weather.model.WeatherResponseData
+import com.weather.viewmodel.FavCityWeatherViewModel
 import com.weather.viewmodel.WeatherSettingViewModel
 import com.weather.viewmodel.WeatherViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,6 +36,7 @@ const val PERMISSIONS_REQUEST_ACCESS_LOCATION: Int = 123
 class HomeFragment : Fragment(), CityOnclickListener {
 
     private val viewModel: WeatherViewModel by viewModels()
+    private val favCityWeatherViewModel: FavCityWeatherViewModel by viewModels()
     private val weatherSettingViewModel: WeatherSettingViewModel by activityViewModels()
 
     private lateinit var binding: FragmentHomeBinding
@@ -64,7 +66,7 @@ class HomeFragment : Fragment(), CityOnclickListener {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
-        viewModel.favouritesLiveData.observe(viewLifecycleOwner, {
+        favCityWeatherViewModel.favouritesLiveData.observe(viewLifecycleOwner, {
             it?.let { favCityWeatherState ->
                 binding.favCitiesRecyclerView.visibility = View.GONE
                 binding.addFavCityContainer.visibility = View.GONE
@@ -81,7 +83,7 @@ class HomeFragment : Fragment(), CityOnclickListener {
             }
         })
 
-        viewModel.fetchFavourites()
+        favCityWeatherViewModel.fetch()
 
         if (
             ActivityCompat.checkSelfPermission(
@@ -150,7 +152,7 @@ class HomeFragment : Fragment(), CityOnclickListener {
             when (userWeatherState) {
                 is UserWeatherState.Success -> {
                     updateUserLocationCard(userWeatherState.results)
-//                    viewModel.scheduleNotification(userWeatherState.results.name)
+                    viewModel.scheduleNotification(userWeatherState.results.name)
                 }
                 is UserWeatherState.Error -> {
 

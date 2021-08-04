@@ -8,7 +8,7 @@ class FetchWeatherByLocationUseCase @Inject constructor(
     private val weatherRepository: WeatherRepository
 ) {
 
-    suspend fun execute(lat: String, lon: String, apiKey: String, units: String) : WeatherResponseData {
-        return weatherRepository.fetchWeatherByLocation(lat, lon, apiKey)
+    suspend fun execute(lat: String, lon: String) : WeatherResponseData {
+        return weatherRepository.fetchWeatherByLocation(lat, lon)
     }
 }

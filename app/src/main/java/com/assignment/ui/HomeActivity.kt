@@ -1,4 +1,4 @@
-package com.assignment.view
+package com.assignment.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

@@ -1,6 +1,7 @@
 package com.assignment.base.di
 
 import com.assignment.base.BuildConfig
+import com.assignment.base.network.QueryParameterInterceptor
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -24,6 +25,7 @@ abstract class NetworkModule {
         @Singleton
         fun provideOkHttpClient(): OkHttpClient {
             val loggingInterceptor = HttpLoggingInterceptor()
+            val queryParameterInterceptor = QueryParameterInterceptor(BuildConfig.API_KEY, "metric")
             loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
 
             val builder = OkHttpClient.Builder()
@@ -31,6 +33,7 @@ abstract class NetworkModule {
                 .writeTimeout(20, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
                 .addInterceptor(loggingInterceptor)
+                .addInterceptor(queryParameterInterceptor)
             return builder.build()
         }
 

@@ -8,7 +8,7 @@ class GetWeakForecastWeatherUseCase @Inject constructor(
     private val weatherRepository: WeatherRepository
 ) {
 
-    suspend fun execute(city: String, apiKey: String, units: String) : ForecastWeather {
-        return weatherRepository.fetchWeekForecastWeatherList(city, apiKey, units, 40)
+    suspend fun execute(city: String) : ForecastWeather {
+        return weatherRepository.fetchWeekForecastWeatherList(city, 40)
     }
 }

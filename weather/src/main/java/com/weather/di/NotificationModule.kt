@@ -2,7 +2,7 @@ package com.weather.di
 
 import android.app.Application
 import androidx.work.WorkManager
-import com.weather.usecase.NotificationUseCase
+import com.weather.usecase.WeatherNotificationUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,8 +22,8 @@ object NotificationModule {
     @Provides
     fun provideNotificationUseCase(
         workManager: WorkManager
-    ): NotificationUseCase {
-        return NotificationUseCase(workManager)
+    ): WeatherNotificationUseCase {
+        return WeatherNotificationUseCase(workManager)
     }
 
 }

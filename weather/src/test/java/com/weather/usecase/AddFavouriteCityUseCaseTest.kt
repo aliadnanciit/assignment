@@ -9,9 +9,9 @@ import org.junit.Before
 
 import org.junit.Test
 
-class FavouritesUseCaseTest {
+class AddFavouriteCityUseCaseTest {
 
-    private lateinit var favouritesUseCase: FavouritesUseCase
+    private lateinit var addFavouriteCityUseCase: AddFavouriteCityUseCase
 
     @MockK
     private lateinit var favouritesRepository: FavouritesRepository
@@ -19,21 +19,14 @@ class FavouritesUseCaseTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        favouritesUseCase = FavouritesUseCase(favouritesRepository)
+        addFavouriteCityUseCase = AddFavouriteCityUseCase(favouritesRepository)
     }
 
     @Test
     fun `add favourite city to repository`() {
         val city = "Dubai"
         every { favouritesRepository.addFavouriteCity(city) } answers { nothing }
-        favouritesUseCase.addFavouriteCity(city)
+        addFavouriteCityUseCase.execute(city)
         verify { favouritesRepository.addFavouriteCity(city) }
-    }
-
-    @Test
-    fun `get favourite cities from repository`() {
-        every { favouritesRepository.getFavouriteCities() } returns emptySet()
-        favouritesUseCase.getFavouriteCities()
-        verify { favouritesRepository.getFavouriteCities() }
     }
 }

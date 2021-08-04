@@ -18,7 +18,6 @@ abstract class WeatherModule {
     abstract fun bindRepository(weatherRepositoryImpl: WeatherRepositoryImpl): WeatherRepository
 
     companion object {
-
         @Provides
         fun provideWeatherApi(
             retrofit: Retrofit

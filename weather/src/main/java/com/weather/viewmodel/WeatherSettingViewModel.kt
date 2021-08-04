@@ -11,7 +11,6 @@ class WeatherSettingViewModel @Inject constructor(
 
     val showTempInDegree = MutableLiveData(true)
 
-
     fun toggleSelection() {
         showTempInDegree.value = showTempInDegree.value!!.not()
     }

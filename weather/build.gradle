@@ -50,9 +50,6 @@ android {
 
     flavorDimensions "version"
     productFlavors {
-        all {
-            buildConfigField "String", "API_KEY", '"710c6ff29ebad2f6059e31dd6c25923a"'
-        }
         staging {
         }
 

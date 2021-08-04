@@ -1,4 +1,4 @@
-package com.weather.view.detail
+package com.weather.ui.detail
 
 import android.graphics.Color
 import android.os.Bundle
@@ -14,6 +14,7 @@ import com.weather.R
 import com.weather.common.TemperatureUtil
 import com.weather.databinding.FragmentForecastWeatherDetailBinding
 import com.weather.model.ListItem
+import com.weather.viewmodel.FavCityWeatherViewModel
 import com.weather.viewmodel.WeatherSettingViewModel
 import com.weather.viewmodel.WeatherViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,6 +25,7 @@ import javax.inject.Inject
 class WeatherDetailFragment : Fragment() {
 
     private val viewModel: WeatherViewModel by viewModels()
+    private val faveCityWeatherViewModel: FavCityWeatherViewModel by viewModels()
     private val weatherSettingViewModel: WeatherSettingViewModel by activityViewModels()
 
     @Inject
@@ -53,7 +55,7 @@ class WeatherDetailFragment : Fragment() {
         binding.weatherRecyclerView.adapter = adapter
         binding.addAsFavCity.setOnClickListener {
             if(binding.cityName.text.toString().isNotEmpty()) {
-                viewModel.addFav(binding.cityName.text.toString())
+                faveCityWeatherViewModel.add(binding.cityName.text.toString())
             }
         }
         return binding.root

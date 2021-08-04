@@ -32,11 +32,7 @@ class DailyNotificationWorker(
         }
         val notificationTitle: String
         val notificationText: String?
-        searchWeatherByCityNameUseCase.execute(
-            inputData.getString(CITY_NAME)!!, inputData.getString(
-                API_KEY
-            )!!
-        ).apply {
+        searchWeatherByCityNameUseCase.execute(inputData.getString(CITY_NAME)!!).apply {
             notificationTitle = name
             notificationText = weather?.first()?.description
         }

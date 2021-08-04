@@ -5,15 +5,10 @@ import com.weather.model.WeatherResponseData
 
 interface WeatherRepository {
 
-    suspend fun fetchWeatherList(city: String, apiKey: String): WeatherResponseData
+    suspend fun fetchWeatherList(city: String): WeatherResponseData
 
-    suspend fun fetchWeatherByLocation(lat: String, lon: String, apiKey: String) : WeatherResponseData
+    suspend fun fetchWeatherByLocation(lat: String, lon: String) : WeatherResponseData
 
-    suspend fun fetchWeekForecastWeatherList(
-        city: String,
-        apiKey: String,
-        units: String = "metric",
-        count: Int
-    ): ForecastWeather
+    suspend fun fetchWeekForecastWeatherList(city: String, count: Int): ForecastWeather
 
 }

@@ -14,16 +14,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.App">
 
-        <activity android:name="com.assignment.view.HomeActivity">
+        <activity android:name="com.assignment.ui.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
-        <activity android:name="com.weather.view.detail.WeatherDetailActivity"/>
-        <activity android:name="com.weather.view.list.WeatherListActivity" />
 
         <provider
             android:name="androidx.work.impl.WorkManagerInitializer"

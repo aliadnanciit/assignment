@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 private const val WORK_NAME = "notification"
 
-class NotificationUseCase @Inject constructor(
+class WeatherNotificationUseCase @Inject constructor(
     private val workManager: WorkManager
 ) {
     fun scheduleNotification(city: String, apiKey: String) {
