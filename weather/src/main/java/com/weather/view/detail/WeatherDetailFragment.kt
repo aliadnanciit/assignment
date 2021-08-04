@@ -10,9 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.weather.R
-import com.weather.common.DensityConverter
-import com.weather.common.ItemHorizontalSpaceDecoration
-import com.weather.common.ItemVerticalSpaceDecoration
 import com.weather.databinding.FragmentForecastWeatherDetailBinding
 import com.weather.model.ListItem
 import com.weather.model.server.WeatherStates
@@ -43,20 +40,6 @@ class WeatherDetailFragment : Fragment() {
         adapter = ForecastWeatherListAdapter()
 
         binding.weatherRecyclerView.adapter = adapter
-//        binding.weatherRecyclerView.addItemDecoration(
-//            ItemVerticalSpaceDecoration(
-//                DensityConverter.toPixel(
-//                    resources, resources.getInteger(R.integer.weather_list_item_vertical_spacing)
-//                )
-//            )
-//        )
-//        binding.weatherRecyclerView.addItemDecoration(
-//            ItemHorizontalSpaceDecoration(
-//                DensityConverter.toPixel(
-//                    resources, resources.getInteger(R.integer.weather_list_item_horizontal_spacing)
-//                )
-//            )
-//        )
         binding.addAsFavCity.setOnClickListener {
             if(binding.cityName.text.toString().isNotEmpty()) {
                 viewModel.addFav(binding.cityName.text.toString())
@@ -85,14 +68,6 @@ class WeatherDetailFragment : Fragment() {
                 showDate(forecastWeather.city.name, list)
             }
         })
-
-//        viewLifecycleOwner.lifecycleScope.launch {
-//            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-//                viewModel.weatherStateFlow.collect { campaigns ->
-//                    processViewState(campaigns)
-//                }
-//            }
-//        }
         loadForecastWeatherData(selectedCity)
     }
 
