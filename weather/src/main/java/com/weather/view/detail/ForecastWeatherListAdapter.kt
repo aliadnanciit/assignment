@@ -18,13 +18,9 @@ class ForecastWeatherListAdapter(): ListAdapter<ListItem, WeatherViewHolder>(wea
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherViewHolder {
-        val holder = WeatherViewHolder(
+        return WeatherViewHolder(
             ItemForecastWeatherBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         )
-//        holder.binding.root.setOnClickListener {
-//            val campaign = it.tag as Weather
-//        }
-        return holder
     }
 
     override fun onBindViewHolder(holder: WeatherViewHolder, position: Int) {
@@ -36,8 +32,9 @@ class WeatherViewHolder(private val binding: ItemForecastWeatherBinding): Recycl
 
     fun bind(item: ListItem) {
         binding.root.tag = item
-        binding.humidity.text = item.main.humidity.toString()
         binding.temperature.text = item.main.temp.toString()
+        binding.date.text = item.dtTxt
+        binding.humidity.text = item.main.humidity.toString()
         binding.wind.text = item.wind.speed.toString()
     }
 }
