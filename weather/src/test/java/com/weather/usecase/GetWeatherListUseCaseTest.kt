@@ -1,14 +1,14 @@
 package com.weather.usecase
 
-import com.weather.model.server.WeatherDto
-import com.weather.model.server.WeatherMetadata
-import com.weather.model.server.WeatherResponse
-import com.weather.model.server.ImageDto
-import com.weather.repository.WeatherRepository
-import io.mockk.MockKAnnotations
-import io.mockk.impl.annotations.MockK
-import kotlinx.coroutines.test.TestCoroutineDispatcher
-import org.junit.Before
+//import com.weather.model.WeatherDto
+//import com.weather.model.server.WeatherMetadata
+//import com.weather.model.server.WeatherResponse
+//import com.weather.model.server.ImageDto
+//import com.weather.repository.WeatherRepository
+//import io.mockk.MockKAnnotations
+//import io.mockk.impl.annotations.MockK
+//import kotlinx.coroutines.test.TestCoroutineDispatcher
+//import org.junit.Before
 
 private const val NAME = "name"
 private const val DESCRIPTION = "description"
@@ -17,30 +17,30 @@ private const val EMPTY = ""
 
 class GetWeatherListUseCaseTest {
 
-    @MockK
-    private lateinit var imageDto: ImageDto
-
-    @MockK
-    private lateinit var weatherDto: WeatherDto
-
-    @MockK
-    private lateinit var metaData: WeatherMetadata
-
-    @MockK
-    private lateinit var weatherRepository: WeatherRepository
-
-    private lateinit var getWeatherListUseCase: GetWeatherListUseCase
-
-    @MockK
-    private lateinit var weatherResponse: WeatherResponse
-
-    private val testCoroutineDispatcher = TestCoroutineDispatcher()
-
-    @Before
-    fun setUp() {
-        MockKAnnotations.init(this)
-//        getCampaignListUseCase = GetCampaignListUseCase(campaignRepository, testCoroutineDispatcher)
-    }
+//    @MockK
+//    private lateinit var imageDto: ImageDto
+//
+//    @MockK
+//    private lateinit var weatherDto: WeatherDto
+//
+//    @MockK
+//    private lateinit var metaData: WeatherMetadata
+//
+//    @MockK
+//    private lateinit var weatherRepository: WeatherRepository
+//
+//    private lateinit var getWeatherListUseCase: GetWeatherListUseCase
+//
+//    @MockK
+//    private lateinit var weatherResponse: WeatherResponse
+//
+//    private val testCoroutineDispatcher = TestCoroutineDispatcher()
+//
+//    @Before
+//    fun setUp() {
+//        MockKAnnotations.init(this)
+////        getCampaignListUseCase = GetCampaignListUseCase(campaignRepository, testCoroutineDispatcher)
+//    }
 
     /*@ExperimentalTime
     @Test

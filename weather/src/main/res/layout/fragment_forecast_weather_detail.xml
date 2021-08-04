@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.weather.view.list.WeatherListActivity">
+    android:layout_height="match_parent">
 
 
     <AutoCompleteTextView
@@ -76,7 +75,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:spanCount="@integer/number_of_columns"
             tools:itemCount="6"
-            tools:listitem="@layout/item_weather"
+            tools:listitem="@layout/item_fav_city"
             tools:visibility="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -95,7 +94,7 @@
         android:id="@+id/noContent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No campaign founds"
+        android:text="No weather informtaion available"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

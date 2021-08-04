@@ -6,7 +6,7 @@
     android:layout_height="48dp">
 
     <TextView
-        android:id="@+id/campaignName"
+        android:id="@+id/city_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="8dp"

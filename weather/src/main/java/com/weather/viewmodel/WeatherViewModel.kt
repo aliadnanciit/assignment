@@ -8,19 +8,13 @@ import com.weather.model.FavCityWeatherState
 import com.weather.model.ForecastWeather
 import com.weather.model.UserWeatherState
 import com.weather.model.WeatherResponseData
-import com.weather.model.server.WeatherStates
 import com.weather.usecase.*
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class WeatherViewModel @Inject constructor(
-    private val getWeatherListUseCase: GetWeatherListUseCase,
     private val searchWeatherByCityNameUseCase: SearchWeatherByCityNameUseCase,
     private val getWeakForecastWeatherUseCase: GetWeakForecastWeatherUseCase,
     private val fetchWeatherByLocationUseCase: FetchWeatherByLocationUseCase,
@@ -28,40 +22,10 @@ class WeatherViewModel @Inject constructor(
     private val notificationUseCase: NotificationUseCase
 ) : ViewModel() {
 
-    private val _weatherStateFlow = MutableStateFlow<WeatherStates>(WeatherStates.Loading)
-    val weatherStateFlow: StateFlow<WeatherStates> = _weatherStateFlow
-
     val weatherForecastLiveData = MutableLiveData<ForecastWeather>()
     val weatherByLocation = MutableLiveData<UserWeatherState<WeatherResponseData>>(UserWeatherState.Loading)
 
     val favouritesLiveData = MutableLiveData<FavCityWeatherState<Set<String>>>(FavCityWeatherState.NoFavList)
-
-    init {
-        getWeather()
-    }
-
-    private fun getWeather() {
-        _weatherStateFlow.value = WeatherStates.Loading
-        viewModelScope.launch {
-            getWeatherListUseCase.execute()
-                .catch {
-                    _weatherStateFlow.value = WeatherStates.Error(it)
-                }
-                .collect {
-                    if (it.isEmpty()) {
-                        _weatherStateFlow.value = WeatherStates.NoContent
-                    } else {
-                        _weatherStateFlow.value = WeatherStates.Success(it)
-                    }
-                }
-        }
-    }
-
-    fun fetchCampaigns() {
-        viewModelScope.launch {
-            searchWeatherByCityNameUseCase.execute("dubai", BuildConfig.API_KEY)
-        }
-    }
 
     fun fetchForecastWeather(city: String) {
         viewModelScope.launch {

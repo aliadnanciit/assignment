@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.weather.databinding.ItemFavCityBinding
-import com.weather.model.Weather
 
 class FavouriteCitiesWeatherAdapter(
     private val weatherClickListener: CityOnclickListener
@@ -40,7 +39,7 @@ class FavouriteCityViewHolder(val binding: ItemFavCityBinding) :
 
     fun bind(city: String) {
         binding.root.tag = city
-        binding.campaignName.text = city
+        binding.cityName.text = city
     }
 }
 

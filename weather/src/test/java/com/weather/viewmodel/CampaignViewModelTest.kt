@@ -1,22 +1,22 @@
 package com.weather.viewmodel
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.weather.model.Weather
-import com.weather.usecase.GetWeatherListUseCase
-import io.mockk.impl.annotations.MockK
-import org.junit.Rule
+//import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+//import com.weather.model.Weather
+//import com.weather.usecase.GetWeatherListUseCase
+//import io.mockk.impl.annotations.MockK
+//import org.junit.Rule
 
 class CampaignViewModelTest {
 
-    @get:Rule
-    val instantTaskExecutor = InstantTaskExecutorRule()
-
-    @MockK
-    private lateinit var weather: Weather
-    private lateinit var viewModel: WeatherViewModel
-
-    @MockK
-    private lateinit var getWeatherListUseCase: GetWeatherListUseCase
+//    @get:Rule
+//    val instantTaskExecutor = InstantTaskExecutorRule()
+//
+//    @MockK
+//    private lateinit var weather: Weather
+//    private lateinit var viewModel: WeatherViewModel
+//
+//    @MockK
+//    private lateinit var getWeatherListUseCase: GetWeatherListUseCase
 
     /*@Before
     fun setUp() {

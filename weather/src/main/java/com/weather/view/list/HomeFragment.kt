@@ -59,7 +59,7 @@ class HomeFragment : Fragment(), CityOnclickListener {
         initViewSetup()
     }
 
-    private fun loadCampaignsData() {
+    private fun loadData() {
         viewModel.fetchForecastWeather("dubai")
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
@@ -125,7 +125,7 @@ class HomeFragment : Fragment(), CityOnclickListener {
 
         adapter = FavouriteCitiesWeatherAdapter(this)
         binding.favCitiesRecyclerView.adapter = adapter
-        loadCampaignsData()
+        loadData()
 
         binding.tempDegree.setOnClickListener {
             weatherSettingViewModel.toggleSelection()

@@ -251,7 +251,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/fav_cities_list_label"
                 app:spanCount="@integer/number_of_columns"
                 tools:itemCount="6"
-                tools:listitem="@layout/item_weather" />
+                tools:listitem="@layout/item_fav_city" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/add_fav_city_container"

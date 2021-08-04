@@ -2,15 +2,11 @@ package com.weather.service
 
 import com.weather.model.ForecastWeather
 import com.weather.model.WeatherResponseData
-import com.weather.model.server.WeatherResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface WeatherApi {
-
-    @GET("cms/test/campaigns.json")
-    suspend fun getCampaigns(): Response<WeatherResponse>
 
     @GET("weather")
     suspend fun getWeatherByCity(
@@ -18,7 +14,7 @@ interface WeatherApi {
         @Query("appid") apiKey: String
     ): Response<WeatherResponseData>
 
-    //https://api.openweathermap.org/data/2.5/weather?lat=37.421851&lon=-122.0841818&appid=710c6ff29ebad2f6059e31dd6c25923a
+
     @GET("weather")
     suspend fun getWeatherByLocation(
         @Query("lat") lat: String,

@@ -14,7 +14,6 @@ import com.weather.R
 import com.weather.common.TemperatureUtil
 import com.weather.databinding.FragmentForecastWeatherDetailBinding
 import com.weather.model.ListItem
-import com.weather.model.server.WeatherStates
 import com.weather.viewmodel.WeatherSettingViewModel
 import com.weather.viewmodel.WeatherViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -88,28 +87,6 @@ class WeatherDetailFragment : Fragment() {
             return it.getString("value")?.toBoolean() ?: false
         }
         return false
-    }
-
-    private fun processViewState(weatherState: WeatherStates) {
-        binding.loadingIndicator.visibility = View.GONE
-        binding.errorContainer.visibility = View.GONE
-        binding.noContent.visibility = View.GONE
-        binding.weatherRecyclerView.visibility = View.GONE
-        when (weatherState) {
-            is WeatherStates.Loading -> {
-                binding.loadingIndicator.visibility = View.VISIBLE
-            }
-            is WeatherStates.NoContent -> {
-                binding.noContent.visibility = View.VISIBLE
-            }
-            is WeatherStates.Success -> {
-                binding.weatherRecyclerView.visibility = View.VISIBLE
-//                showDate(weatherState.list)
-            }
-            is WeatherStates.Error -> {
-                binding.errorContainer.visibility = View.VISIBLE
-            }
-        }
     }
 
     private fun initViewSetup() {
