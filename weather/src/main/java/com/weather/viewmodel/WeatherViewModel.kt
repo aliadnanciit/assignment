@@ -3,6 +3,7 @@ package com.weather.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.weather.BuildConfig
 import com.weather.model.FavCityWeatherState
 import com.weather.model.ForecastWeather
 import com.weather.model.UserWeatherState
@@ -23,7 +24,8 @@ class WeatherViewModel @Inject constructor(
     private val searchWeatherByCityNameUseCase: SearchWeatherByCityNameUseCase,
     private val getWeakForecastWeatherUseCase: GetWeakForecastWeatherUseCase,
     private val fetchWeatherByLocationUseCase: FetchWeatherByLocationUseCase,
-    private val favouritesUseCase: FavouritesUseCase
+    private val favouritesUseCase: FavouritesUseCase,
+    private val notificationUseCase: NotificationUseCase
 ) : ViewModel() {
 
     private val _weatherStateFlow = MutableStateFlow<WeatherStates>(WeatherStates.Loading)
@@ -58,13 +60,13 @@ class WeatherViewModel @Inject constructor(
 
     fun fetchCampaigns() {
         viewModelScope.launch {
-            searchWeatherByCityNameUseCase.execute("dubai", "710c6ff29ebad2f6059e31dd6c25923a")
+            searchWeatherByCityNameUseCase.execute("dubai", BuildConfig.API_KEY)
         }
     }
 
     fun fetchForecastWeather(city: String) {
         viewModelScope.launch {
-            val response = getWeakForecastWeatherUseCase.execute(city, "710c6ff29ebad2f6059e31dd6c25923a", "metric")
+            val response = getWeakForecastWeatherUseCase.execute(city, BuildConfig.API_KEY, "metric")
             weatherForecastLiveData.value = response
         }
     }
@@ -76,7 +78,7 @@ class WeatherViewModel @Inject constructor(
             val response = fetchWeatherByLocationUseCase.execute(
                 lat,
                 lon,
-                "710c6ff29ebad2f6059e31dd6c25923a",
+                BuildConfig.API_KEY,
                 "metric"
             )
             weatherByLocation.value = UserWeatherState.Success(response)
@@ -102,5 +104,9 @@ class WeatherViewModel @Inject constructor(
 
     fun needLocationPermission() {
         weatherByLocation.value = UserWeatherState.PermissionRequired
+    }
+
+    fun scheduleNotification(city: String) {
+        notificationUseCase.scheduleNotification(city, BuildConfig.API_KEY)
     }
 }

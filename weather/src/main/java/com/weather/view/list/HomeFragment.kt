@@ -114,6 +114,7 @@ class HomeFragment : Fragment(), CityOnclickListener {
                 when (userWeatherState) {
                     is UserWeatherState.Success -> {
                         updateUserLocationCard(userWeatherState.results)
+                        viewModel.scheduleNotification(userWeatherState.results.name)
                     }
                     is UserWeatherState.Error -> {
 

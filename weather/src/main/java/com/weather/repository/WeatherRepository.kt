@@ -9,7 +9,7 @@ interface WeatherRepository {
 
     suspend fun getWeatherList(): Flow<List<Weather>>
 
-    suspend fun fetchWeatherList(city: String, apiKey: String)
+    suspend fun fetchWeatherList(city: String, apiKey: String): WeatherResponseData
 
     suspend fun fetchWeatherByLocation(lat: String, lon: String, apiKey: String) : WeatherResponseData
 
@@ -19,4 +19,5 @@ interface WeatherRepository {
         units: String = "metric",
         count: Int
     ): ForecastWeather
+
 }

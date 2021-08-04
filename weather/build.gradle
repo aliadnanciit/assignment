@@ -50,6 +50,9 @@ android {
 
     flavorDimensions "version"
     productFlavors {
+        all {
+            buildConfigField "String", "API_KEY", '"710c6ff29ebad2f6059e31dd6c25923a"'
+        }
         staging {
         }
 
@@ -59,7 +62,7 @@ android {
 }
 
 dependencies {
-    implementation project(':base')
+    api project(':base')
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 

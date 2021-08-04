@@ -43,15 +43,13 @@ class WeatherRepositoryImpl @Inject constructor(
             .flowOn(ioDispatcher)
     }
 
-    override suspend fun fetchWeatherList(city: String, apiKey: String) {
-        withContext(ioDispatcher) {
+    override suspend fun fetchWeatherList(city: String, apiKey: String): WeatherResponseData {
+        return withContext(ioDispatcher) {
             val response = safeApiCall {
                 weatherApi.getWeatherByCity(city, apiKey)
             }
             if (response.isSuccessful) {
-                val list = response.body()!!
-                Timber.d("data -> $list")
-                //saveCampaigns(list)
+                response.body()!!
             } else {
                 throw ApiNetworkException("Fail to get weather due to network error")
             }
