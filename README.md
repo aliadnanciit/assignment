@@ -36,6 +36,7 @@ Application has 3 basic modules (app, base and weather). Here is brief detail ab
 
 
 ## Tech Stack
+- MVVM (Also demonstrate state handling on first UI using MVVM)
 - Kotlin - Programming language (Sealed classes for UI state handling at first UI for state handling demonstration)
 - Hilt - Used to provide all dependencies to classes
 - Retrofit with OkHttp3 - Parse http request/response API and also add intercepter to minimize common query parameters
@@ -46,7 +47,7 @@ Application has 3 basic modules (app, base and weather). Here is brief detail ab
 - Work Manager - Used it to schedule weather notification once in a day at 6am
 
 
-## App arch components
+## App Arch components
 - Use modular design to build 3 basic modules and how they communicate with each other
 - ViewModel: provide state to view for UI classes
 - UseCase: Keep all business rules and logic
