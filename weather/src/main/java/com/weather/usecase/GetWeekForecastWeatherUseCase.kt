@@ -4,7 +4,7 @@ import com.weather.model.ForecastWeather
 import com.weather.repository.WeatherRepository
 import javax.inject.Inject
 
-class GetWeakForecastWeatherUseCase @Inject constructor(
+class GetWeekForecastWeatherUseCase @Inject constructor(
     private val weatherRepository: WeatherRepository
 ) {
 

@@ -5,7 +5,7 @@ import com.weather.model.WeatherResponseData
 
 interface WeatherRepository {
 
-    suspend fun fetchWeatherList(city: String): WeatherResponseData
+    suspend fun fetchWeatherListByCityName(city: String): WeatherResponseData
 
     suspend fun fetchWeatherByLocation(lat: String, lon: String) : WeatherResponseData
 

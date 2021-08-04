@@ -17,7 +17,7 @@ class WeatherRepositoryImpl @Inject constructor(
     @Named("IO_DISPATCHER") private val ioDispatcher: CoroutineDispatcher
 ) : WeatherRepository {
 
-    override suspend fun fetchWeatherList(city: String): WeatherResponseData {
+    override suspend fun fetchWeatherListByCityName(city: String): WeatherResponseData {
         return withContext(ioDispatcher) {
             val response = safeApiCall {
                 weatherApi.getWeatherByCity(city)

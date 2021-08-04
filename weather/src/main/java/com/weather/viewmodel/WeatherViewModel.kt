@@ -7,15 +7,16 @@ import com.weather.model.ForecastWeather
 import com.weather.model.UserWeatherState
 import com.weather.model.WeatherResponseData
 import com.weather.usecase.FetchWeatherByLocationUseCase
-import com.weather.usecase.GetWeakForecastWeatherUseCase
+import com.weather.usecase.GetWeekForecastWeatherUseCase
 import com.weather.usecase.WeatherNotificationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel
 class WeatherViewModel @Inject constructor(
-    private val getWeakForecastWeatherUseCase: GetWeakForecastWeatherUseCase,
+    private val getWeekForecastWeatherUseCase: GetWeekForecastWeatherUseCase,
     private val fetchWeatherByLocationUseCase: FetchWeatherByLocationUseCase,
     private val weatherNotificationUseCase: WeatherNotificationUseCase
 ) : ViewModel() {
@@ -25,8 +26,13 @@ class WeatherViewModel @Inject constructor(
 
     fun fetchForecastWeather(city: String) {
         viewModelScope.launch {
-            val response = getWeakForecastWeatherUseCase.execute(city)
-            weatherForecastLiveData.value = response
+            try {
+                val response = getWeekForecastWeatherUseCase.execute(city)
+                weatherForecastLiveData.value = response
+            }
+            catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 
