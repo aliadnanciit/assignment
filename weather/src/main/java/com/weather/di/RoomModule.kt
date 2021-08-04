@@ -2,13 +2,13 @@ package com.weather.di
 
 import android.content.Context
 import androidx.room.Room
+import com.weather.database.AppDatabase
+import com.weather.database.WeatherDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import com.weather.database.AppDatabase
-import com.weather.database.WeatherDao
 import javax.inject.Singleton
 
 @Module
