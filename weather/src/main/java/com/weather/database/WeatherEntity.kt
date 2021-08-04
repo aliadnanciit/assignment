@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 data class WeatherEntity(
     @PrimaryKey(autoGenerate = true) val uid: Int,
     val name: String,
-    val description: String,
-    val imageUrl: String
+    val temperature: Double,
+    val humidity: Int = 0,
+    val speed: Double = 0.0
 )

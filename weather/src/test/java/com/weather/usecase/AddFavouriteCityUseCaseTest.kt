@@ -1,10 +1,10 @@
 package com.weather.usecase
 
 import com.weather.repository.FavouritesRepository
-import io.mockk.MockKAnnotations
-import io.mockk.every
+import io.mockk.*
 import io.mockk.impl.annotations.MockK
-import io.mockk.verify
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
 
 import org.junit.Test
@@ -16,6 +16,8 @@ class AddFavouriteCityUseCaseTest {
     @MockK
     private lateinit var favouritesRepository: FavouritesRepository
 
+    private val testCoroutineDispatcher = TestCoroutineDispatcher()
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
@@ -23,10 +25,10 @@ class AddFavouriteCityUseCaseTest {
     }
 
     @Test
-    fun `add favourite city to repository`() {
+    fun `add favourite city to repository`() = runBlockingTest {
         val city = "Dubai"
-        every { favouritesRepository.addFavouriteCity(city) } answers { nothing }
+        coEvery { favouritesRepository.addFavouriteCity(city) } answers { nothing }
         addFavouriteCityUseCase.execute(city)
-        verify { favouritesRepository.addFavouriteCity(city) }
+        coVerify { favouritesRepository.addFavouriteCity(city) }
     }
 }

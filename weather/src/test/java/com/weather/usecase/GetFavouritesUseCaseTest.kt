@@ -2,11 +2,11 @@ package com.weather.usecase
 
 import com.weather.repository.FavouritesRepository
 import io.mockk.MockKAnnotations
-import io.mockk.every
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
-import io.mockk.verify
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
-
 import org.junit.Test
 
 class GetFavouritesUseCaseTest {
@@ -23,9 +23,9 @@ class GetFavouritesUseCaseTest {
     }
 
     @Test
-    fun `get favourite cities from repository`() {
-        every { favouritesRepository.getFavouriteCities() } returns emptySet()
+    fun `get favourite cities from repository`() = runBlockingTest {
+        coEvery { favouritesRepository.getFavouriteCities() } returns emptySet()
         getFavouritesUseCase.execute()
-        verify { favouritesRepository.getFavouriteCities() }
+        coVerify { favouritesRepository.getFavouriteCities() }
     }
 }

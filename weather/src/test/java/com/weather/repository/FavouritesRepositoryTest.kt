@@ -5,6 +5,8 @@ import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.verify
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert
 import org.junit.Before
 
@@ -20,33 +22,35 @@ class FavouritesRepositoryTest {
     @RelaxedMockK
     private lateinit var sharedPreferences: SharedPreferences
 
+    private val testCoroutineDispatcher = TestCoroutineDispatcher()
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        favouritesRepository = FavouritesRepository(sharedPreferences)
+        favouritesRepository = FavouritesRepository(sharedPreferences, testCoroutineDispatcher)
     }
 
     @Test
-    fun `list favourite cities from preferences`(){
+    fun `list favourite cities from preferences`() = testCoroutineDispatcher.runBlockingTest {
         favouritesRepository.getFavouriteCities()
         verify { sharedPreferences.getStringSet("fav_key", emptySet()) }
     }
 
     @Test
-    fun `WHEN favourite cities from preferences are not available THEN return empty set`(){
+    fun `WHEN favourite cities from preferences are not available THEN return empty set`() = testCoroutineDispatcher.runBlockingTest {
         every { sharedPreferences.getStringSet(any(), any()) } returns null
         assertEquals(emptySet<String>(), favouritesRepository.getFavouriteCities())
     }
 
     @Test
-    fun `WHEN favourite cities from preferences are available THEN return them`(){
+    fun `WHEN favourite cities from preferences are available THEN return them`() = testCoroutineDispatcher.runBlockingTest {
         val city = "Dubai"
         every { sharedPreferences.getStringSet(any(), any()) } returns setOf(city)
         assertEquals(setOf(city), favouritesRepository.getFavouriteCities())
     }
 
     @Test
-    fun `WHEN adding a favourite city THEN add to preferences`(){
+    fun `WHEN adding a favourite city THEN add to preferences`() = testCoroutineDispatcher.runBlockingTest {
         val city = "Dubai"
         val favourites = setOf(city)
         every { sharedPreferences.getStringSet(any(), any()) } returns emptySet()

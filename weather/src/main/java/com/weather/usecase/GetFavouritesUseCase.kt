@@ -6,7 +6,7 @@ import javax.inject.Inject
 class GetFavouritesUseCase @Inject constructor(
     private val favouritesRepository: FavouritesRepository
 ) {
-    fun execute(): Set<String> {
+    suspend fun execute(): Set<String> {
         return favouritesRepository.getFavouriteCities()
     }
 }
