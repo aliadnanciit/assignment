@@ -25,7 +25,7 @@ abstract class NetworkModule {
         @Singleton
         fun provideOkHttpClient(): OkHttpClient {
             val loggingInterceptor = HttpLoggingInterceptor()
-            val queryParameterInterceptor = QueryParameterInterceptor(BuildConfig.API_KEY, "metric")
+            val queryParameterInterceptor = QueryParameterInterceptor(BuildConfig.API_KEY, "imperial")
             loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
 
             val builder = OkHttpClient.Builder()

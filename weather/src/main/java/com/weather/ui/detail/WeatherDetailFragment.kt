@@ -93,7 +93,7 @@ class WeatherDetailFragment : Fragment() {
         binding.weatherRecyclerView.visibility = View.VISIBLE
         binding.cityInfoContainer.visibility = View.VISIBLE
         if(paramCity == null) {
-            binding.addAsFavCity.visibility = View.VISIBLE
+            binding.addAsFavCity.isEnabled = true
         }
         adapter.submitList(list)
     }

@@ -36,6 +36,7 @@ Application has 3 basic modules (app, base and weather). Here is brief detail ab
 
 
 ## Tech Stack
+- Modular architecture supporting different development environment like staging and prod
 - MVVM (Also demonstrate state handling on first UI using MVVM)
 - Kotlin - Programming language (Sealed classes for UI state handling at first UI for state handling demonstration)
 - Hilt - Used to provide all dependencies to classes
@@ -56,6 +57,10 @@ Application has 3 basic modules (app, base and weather). Here is brief detail ab
 
 ## Unit testing
 - Added unit tests for view model, useCase and repository classes for demonstration
+
+## How to Use app
+- Allow user location permission
+- To Add Fav City -> Click search bar or Add button Fav -> type fav city name in search bar and hit search button. if city name is valid then it will show result and show Add City Fav button as well
 
 
 ## Possible Improvements
