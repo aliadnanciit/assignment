@@ -54,15 +54,13 @@ android {
         staging {
             dimension "version"
             applicationIdSuffix ".staging"
-            buildConfigField "String", "BASE_URL", '"https://api.openweathermap.org/data/2.5/"'
-            buildConfigField "String", "API_KEY", '"710c6ff29ebad2f6059e31dd6c25923a"'
+            buildConfigField "String", "BASE_URL", '"https://api.shrtco.de/v2/"'
         }
 
         prod {
             dimension "version"
             applicationIdSuffix ".prod"
-            buildConfigField "String", "BASE_URL", '"https://api.openweathermap.org/data/2.5/"'
-            buildConfigField "String", "API_KEY", '"710c6ff29ebad2f6059e31dd6c25923a"'
+            buildConfigField "String", "BASE_URL", '"https://api.shrtco.de/v2/"'
         }
     }
 }

@@ -1,10 +1,10 @@
 package com.assignment.model
 
-sealed class UIState<out T : Any> {
+sealed class UIState {
 
-    object Loading: UIState<Nothing>()
+    object Loading: UIState()
 
-    data class Success<out T : Any>(val results: T): UIState<T>()
+    data class Success(val results: Any): UIState()
 
-    data class Error(val exception: Throwable): UIState<Nothing>()
+    data class Error(val exception: Throwable): UIState()
 }

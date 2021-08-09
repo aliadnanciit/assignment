@@ -19,8 +19,7 @@
     <fragment
         android:id="@+id/navigation_history"
         android:name="com.assignment.ui.history.HistoryFragment"
-        android:label="Weather Details"
-        tools:layout="@layout/fragment_url_history">
-        <deepLink app:uri="@string/deeplink_weather_details" />
+        android:label="History"
+        tools:layout="@layout/fragment_url_history"> />
     </fragment>
 </navigation>

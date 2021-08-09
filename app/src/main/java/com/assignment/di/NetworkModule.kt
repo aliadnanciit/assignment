@@ -32,16 +32,13 @@ abstract class NetworkModule {
         @Singleton
         fun provideOkHttpClient(): OkHttpClient {
             val loggingInterceptor = HttpLoggingInterceptor()
-            val queryParameterInterceptor =
-                com.assignment.network.QueryParameterInterceptor(BuildConfig.API_KEY, "imperial")
             loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
 
             val builder = OkHttpClient.Builder()
-            builder.connectTimeout(20, TimeUnit.SECONDS)
-                .writeTimeout(20, TimeUnit.SECONDS)
-                .readTimeout(30, TimeUnit.SECONDS)
+            builder.connectTimeout(60, TimeUnit.SECONDS)
+                .writeTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
                 .addInterceptor(loggingInterceptor)
-                .addInterceptor(queryParameterInterceptor)
             return builder.build()
         }
 

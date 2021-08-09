@@ -2,14 +2,11 @@ package com.assignment.service
 
 import com.assignment.model.ShortURLResponse
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface ShortUrlApi {
 
-    @GET("shorten")
-    suspend fun createShortenUrl(
-        @Body url: String
-    ): Response<ShortURLResponse>
-
+    @POST("shorten")
+    suspend fun createShortenUrl(@Query("url") url: String): Response<ShortURLResponse>
 }

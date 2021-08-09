@@ -1,7 +1,10 @@
 package com.assignment.viewmodel
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.assignment.model.UIState
 import com.assignment.usecase.CreateShortURLUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -12,18 +15,20 @@ class ShortURLViewModel @Inject constructor(
     private val createShortURLUseCase: CreateShortURLUseCase
 ) : ViewModel() {
 
-//    val weatherForecastLiveData = MutableLiveData<com.assignment.model.ForecastWeather>()
-//    val weatherByLocation = MutableLiveData<com.assignment.model.UIState<com.assignment.model.WeatherResponseData>>(
-//        com.assignment.model.UIState.Loading)
+    private val _uiStateLiveData = MutableLiveData<UIState>()
+    val uiStateLiveData : LiveData<UIState> = _uiStateLiveData
 
-    fun fetchForecastWeather(city: String) {
+    fun createShortUrl(url: String) {
+        _uiStateLiveData.value = UIState.Loading
+
         viewModelScope.launch {
             try {
-//                val response = createShortURLUseCase.create(city)
-//                weatherForecastLiveData.value = response
+                val response = createShortURLUseCase.create(url)
+                _uiStateLiveData.value = UIState.Success(response)
             }
             catch (e: Exception) {
                 e.printStackTrace()
+                _uiStateLiveData.value = UIState.Error(e)
             }
         }
     }

@@ -5,13 +5,13 @@ import com.squareup.moshi.Json
 
 data class ShortURLResponse(
     @Json(name = "result")
-    val result: Result,
+    val shortURL: ShortURL,
     @Json(name = "ok")
     val ok: Boolean = false,
 )
 
 
-data class Result(
+data class ShortURL(
     @Json(name = "code")
     val code: String = "",
     @Json(name = "short_link")

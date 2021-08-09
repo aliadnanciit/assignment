@@ -1,9 +1,9 @@
 package com.assignment.repository
 
-import com.assignment.model.ShortURLResponse
+import com.assignment.model.ShortURL
 
 interface ShortenUrlRepository {
 
-    suspend fun createShortenUrl(url: String): ShortURLResponse
+    suspend fun createShortenUrl(url: String): ShortURL
 
 }

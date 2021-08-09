@@ -9,7 +9,6 @@ class GetHistoryUseCase @Inject constructor(
 ) {
 
     suspend fun getHistory() : List<ShortUrlModel> {
-        return emptyList()
-//        return historyRepository.getHistory()
+        return historyRepository.getHistory()
     }
 }

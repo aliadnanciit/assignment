@@ -6,7 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.assignment.databinding.FragmentHomeBinding
+import com.assignment.model.UIState
 import com.assignment.viewmodel.ShortURLViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,7 +25,9 @@ class HomeFragment : Fragment() {
     ): View {
         binding = FragmentHomeBinding.inflate(layoutInflater)
         binding.buttonShorten.setOnClickListener {
-
+            if(binding.edittextLink.text.toString().isNotEmpty()) {
+                viewModel.createShortUrl(binding.edittextLink.text.toString())
+            }
         }
         return binding.root
     }
@@ -31,9 +35,22 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        viewModel.weatherByLocation.observe(viewLifecycleOwner, Observer {
-//
-//        })
+        viewModel.uiStateLiveData.observe(viewLifecycleOwner, Observer {
+            processUIState(it)
+        })
     }
 
+    private fun processUIState(uiState: UIState) {
+        when(uiState) {
+            is UIState.Loading -> {
+
+            }
+            is UIState.Success -> {
+
+            }
+            else -> {
+
+            }
+        }
+    }
 }

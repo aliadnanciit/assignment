@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class HistoryEntity(
-    @PrimaryKey(autoGenerate = true) val uid: Int,
+    @PrimaryKey(autoGenerate = true) var uid: Int? = null,
     val code: String = "",
     val shortLink: String = "",
     val shortLink2: String = "",
