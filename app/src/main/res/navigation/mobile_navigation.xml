@@ -6,7 +6,7 @@
     app:startDestination="@+id/navigation_splash">
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.assignment.ui.main.MainWeatherFragment"
+        android:name="com.assignment.ui.home.MainWeatherFragment"
         tools:layout="@layout/fragment_home">
     </fragment>
 
@@ -18,9 +18,9 @@
 
     <fragment
         android:id="@+id/navigation_history"
-        android:name="com.assignment.ui.detail.WeatherDetailFragment"
+        android:name="com.assignment.ui.history.URLHistoryFragment"
         android:label="Weather Details"
-        tools:layout="@layout/fragment_forecast_weather_detail">
+        tools:layout="@layout/fragment_url_history">
         <deepLink app:uri="@string/deeplink_weather_details" />
     </fragment>
 </navigation>

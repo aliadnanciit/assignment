@@ -1,7 +1,7 @@
 package com.assignment
 
 import android.app.Application
-import com.assignment.usecase.SearchWeatherByCityNameUseCase
+import com.assignment.usecase.CreateShortURLUseCase
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 import javax.inject.Inject
@@ -10,7 +10,7 @@ import javax.inject.Inject
 class AssignmentApp : Application() {
 
     @Inject
-    lateinit var searchWeatherByCityNameUseCase: SearchWeatherByCityNameUseCase
+    lateinit var createShortURLUseCase: CreateShortURLUseCase
 
     override fun onCreate() {
         super.onCreate()

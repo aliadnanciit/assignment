@@ -2,27 +2,29 @@ package com.assignment.di
 
 import com.assignment.repository.WeatherRepository
 import com.assignment.repository.WeatherRepositoryImpl
-import com.assignment.service.WeatherApi
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import retrofit2.Retrofit
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import javax.inject.Named
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class WeatherModule {
+abstract class AppModule {
 
     @Binds
     abstract fun bindRepository(weatherRepositoryImpl: WeatherRepositoryImpl): WeatherRepository
 
     companion object {
         @Provides
-        fun provideWeatherApi(
-            retrofit: Retrofit
-        ): WeatherApi {
-            return retrofit.create(WeatherApi::class.java)
-        }
+        @Named("IO_DISPATCHER")
+        fun provideIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
+
+        @Provides
+        @Named("DEFAULT_DISPATCHER")
+        fun provideDefaultDispatcher(): CoroutineDispatcher = Dispatchers.Default
     }
 }

@@ -1,6 +1,7 @@
 package com.assignment.di
 
 import com.assignment.BuildConfig
+import com.assignment.service.ShortUrlApi
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -19,6 +20,13 @@ import javax.inject.Singleton
 abstract class NetworkModule {
 
     companion object {
+
+        @Provides
+        fun provideShortUrlApi(
+            retrofit: Retrofit
+        ): ShortUrlApi {
+            return retrofit.create(ShortUrlApi::class.java)
+        }
 
         @Provides
         @Singleton

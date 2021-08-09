@@ -1,4 +1,4 @@
-package com.assignment.ui.main
+package com.assignment.ui.home
 
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -4,11 +4,11 @@ import com.assignment.model.ForecastWeather
 import com.assignment.repository.WeatherRepository
 import javax.inject.Inject
 
-class GetWeekForecastWeatherUseCase @Inject constructor(
-    private val weatherRepository: com.assignment.repository.WeatherRepository
+class AddToHistoryUseCase @Inject constructor(
+    private val weatherRepository: WeatherRepository
 ) {
 
-    suspend fun execute(city: String) : com.assignment.model.ForecastWeather {
+    suspend fun execute(city: String) : ForecastWeather {
         return weatherRepository.fetchWeekForecastWeatherList(city, 40)
     }
 }

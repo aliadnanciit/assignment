@@ -1,12 +1,10 @@
 package com.assignment.service
 
-import com.assignment.model.ForecastWeather
-import com.assignment.model.WeatherResponseData
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface WeatherApi {
+interface ShortUrlApi {
 
     @GET("weather")
     suspend fun getWeatherByCity(
