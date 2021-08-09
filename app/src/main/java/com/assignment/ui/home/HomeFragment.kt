@@ -6,15 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import com.assignment.databinding.FragmentHomeBinding
-import com.assignment.viewmodel.WeatherViewModel
+import com.assignment.viewmodel.ShortURLViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainWeatherFragment : Fragment() {
+class HomeFragment : Fragment() {
 
-    private val viewModel: WeatherViewModel by viewModels()
+    private val viewModel: ShortURLViewModel by viewModels()
 
     private lateinit var binding: FragmentHomeBinding
 
@@ -32,9 +31,9 @@ class MainWeatherFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.weatherByLocation.observe(viewLifecycleOwner, Observer {
-
-        })
+//        viewModel.weatherByLocation.observe(viewLifecycleOwner, Observer {
+//
+//        })
     }
 
 }

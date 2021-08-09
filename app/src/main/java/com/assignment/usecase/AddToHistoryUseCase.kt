@@ -1,14 +1,13 @@
 package com.assignment.usecase
 
-import com.assignment.model.ForecastWeather
-import com.assignment.repository.WeatherRepository
+import com.assignment.repository.ShortenUrlRepository
 import javax.inject.Inject
 
 class AddToHistoryUseCase @Inject constructor(
-    private val weatherRepository: WeatherRepository
+    private val shortenUrlRepository: ShortenUrlRepository
 ) {
 
-    suspend fun execute(city: String) : ForecastWeather {
-        return weatherRepository.fetchWeekForecastWeatherList(city, 40)
+    suspend fun execute(city: String) {
+//        return shortenUrlRepository.fetchWeekForecastWeatherList(city, 40)
     }
 }

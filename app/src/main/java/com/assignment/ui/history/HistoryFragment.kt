@@ -6,16 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import com.assignment.databinding.FragmentUrlHistoryBinding
-import com.assignment.viewmodel.WeatherViewModel
+import com.assignment.viewmodel.HistoryViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class URLHistoryFragment : Fragment() {
+class HistoryFragment : Fragment() {
 
-    private val viewModel: WeatherViewModel by viewModels()
+    private val viewModel: HistoryViewModel by viewModels()
 
     private lateinit var binding: FragmentUrlHistoryBinding
     private lateinit var adapter: HistoryPagingAdapter
@@ -36,17 +35,17 @@ class URLHistoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.weatherForecastLiveData.observe(viewLifecycleOwner, Observer { forecastWeather ->
-
-        })
+//        viewModel.weatherForecastLiveData.observe(viewLifecycleOwner, Observer { forecastWeather ->
+//
+//        })
         loadForecastWeatherData()
     }
 
     private fun loadForecastWeatherData() {
-        viewModel.fetchForecastWeather("")
+//        viewModel.fetchForecastWeather("")
     }
 
-    private fun showDate(city: String, list: List<com.assignment.model.ListItem>) {
+//    private fun showDate(city: String, list: List<com.assignment.model.ListItem>) {
 //        adapter.submitList(list)
-    }
+//    }
 }

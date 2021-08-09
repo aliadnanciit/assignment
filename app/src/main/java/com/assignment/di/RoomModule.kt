@@ -3,7 +3,7 @@ package com.assignment.di
 import android.content.Context
 import androidx.room.Room
 import com.assignment.database.AppDatabase
-import com.assignment.database.WeatherDao
+import com.assignment.database.HistoryDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,15 +17,15 @@ object RoomModule {
 
     @Provides
     @Singleton
-    fun provideAppDatabase(@ApplicationContext appContext: Context): com.assignment.database.AppDatabase {
+    fun provideAppDatabase(@ApplicationContext appContext: Context): AppDatabase {
         return Room.databaseBuilder(
             appContext,
-            com.assignment.database.AppDatabase::class.java, "AppDatabase"
+            AppDatabase::class.java, "AppDatabase"
         ).build()
     }
 
     @Provides
-    fun provideMovieDao(appDatabase: com.assignment.database.AppDatabase): com.assignment.database.WeatherDao {
-        return appDatabase.weatherDao()
+    fun provideMovieDao(appDatabase: AppDatabase): HistoryDao {
+        return appDatabase.historyDao()
     }
 }

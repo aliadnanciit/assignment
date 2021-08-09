@@ -1,7 +1,9 @@
 package com.assignment.di
 
-import com.assignment.repository.WeatherRepository
-import com.assignment.repository.WeatherRepositoryImpl
+import com.assignment.repository.HistoryRepository
+import com.assignment.repository.HistoryRepositoryImpl
+import com.assignment.repository.ShortenUrlRepository
+import com.assignment.repository.ShortenUrlRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -16,7 +18,10 @@ import javax.inject.Named
 abstract class AppModule {
 
     @Binds
-    abstract fun bindRepository(weatherRepositoryImpl: WeatherRepositoryImpl): WeatherRepository
+    abstract fun bindShortenUrlRepository(shortenUrlRepositoryImpl: ShortenUrlRepositoryImpl): ShortenUrlRepository
+
+    @Binds
+    abstract fun bindHistoryRepository(historyRepositoryImpl: HistoryRepositoryImpl): HistoryRepository
 
     companion object {
         @Provides

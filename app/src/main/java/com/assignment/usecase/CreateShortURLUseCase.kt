@@ -1,13 +1,12 @@
 package com.assignment.usecase
 
-import com.assignment.model.WeatherResponseData
-import com.assignment.repository.WeatherRepository
+import com.assignment.repository.ShortenUrlRepository
 import javax.inject.Inject
 
 class CreateShortURLUseCase @Inject constructor(
-    private val weatherRepository: WeatherRepository
+    private val shortenUrlRepository: ShortenUrlRepository
 ) {
-    suspend fun create(city: String): WeatherResponseData {
-        return weatherRepository.fetchWeatherListByCityName(city)
+    suspend fun create(city: String) {
+//        return shortenUrlRepository.fetchWeatherListByCityName(city)
     }
 }
