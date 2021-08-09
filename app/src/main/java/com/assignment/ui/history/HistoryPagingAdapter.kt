@@ -8,12 +8,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.assignment.databinding.ItemHistoryBinding
 import com.assignment.model.ShortUrlModel
 
-class HistoryPagingAdapter() : PagingDataAdapter<ShortUrlModel, HistoryViewHolder>(diff) {
+class HistoryPagingAdapter : PagingDataAdapter<ShortUrlModel, HistoryViewHolder>(diff) {
 
     companion object {
         val diff = object : DiffUtil.ItemCallback<ShortUrlModel>() {
             override fun areItemsTheSame(oldItem: ShortUrlModel, newItem: ShortUrlModel): Boolean {
-                return oldItem.code == newItem.code
+                return oldItem.id == newItem.id
             }
 
             override fun areContentsTheSame(oldItem: ShortUrlModel, newItem: ShortUrlModel): Boolean {
@@ -41,5 +41,8 @@ class HistoryViewHolder(
 
     fun bind(item: ShortUrlModel) {
         binding.root.tag = item
+
+        binding.shortLink.text = item.shortLink
+        binding.link.text = item.fullShortLink
     }
 }

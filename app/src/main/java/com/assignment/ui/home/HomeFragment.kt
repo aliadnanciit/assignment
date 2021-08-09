@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
+import com.assignment.R
 import com.assignment.databinding.FragmentHomeBinding
 import com.assignment.model.UIState
 import com.assignment.viewmodel.ShortURLViewModel
@@ -25,6 +27,8 @@ class HomeFragment : Fragment() {
     ): View {
         binding = FragmentHomeBinding.inflate(layoutInflater)
         binding.buttonShorten.setOnClickListener {
+
+//            findNavController().navigate(R.id.navigation_history)
             if(binding.edittextLink.text.toString().isNotEmpty()) {
                 viewModel.createShortUrl(binding.edittextLink.text.toString())
             }

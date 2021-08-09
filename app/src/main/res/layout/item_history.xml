@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_height="200dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="8dp"
     app:cardCornerRadius="8dp"
     app:cardElevation="4dp"
+    android:layout_marginHorizontal="@dimen/horizontal_margin_item_history"
+    android:layout_gravity="center_horizontal"
     app:cardUseCompatPadding="true">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -78,6 +80,6 @@
             app:layout_constraintLeft_toLeftOf="@id/link"
             app:layout_constraintRight_toRightOf="@id/image_delete"
             app:layout_constraintBottom_toBottomOf="parent"/>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </com.google.android.material.card.MaterialCardView>

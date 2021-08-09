@@ -21,7 +21,7 @@ class SplashFragment : Fragment() {
     ): View {
         binding = FragmentSplashBinding.inflate(layoutInflater)
         binding.buttonStart.setOnClickListener {
-            findNavController().navigate(R.id.navigation_home)
+            findNavController().navigate(R.id.navigation_carousal)
         }
         return binding.root
     }

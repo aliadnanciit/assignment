@@ -3,23 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation.xml"
-    app:startDestination="@+id/navigation_splash">
+    app:startDestination="@+id/navigation_history">
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.assignment.ui.home.HomeFragment"
-        tools:layout="@layout/fragment_home">
-    </fragment>
+        tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/navigation_splash"
         android:name="com.assignment.ui.splash.SplashFragment"
-        tools:layout="@layout/fragment_splash">
-    </fragment>
+        tools:layout="@layout/fragment_splash" />
+
+    <fragment
+        android:id="@+id/navigation_carousal"
+        android:name="com.assignment.ui.onboarding.CarousalFragment"
+        tools:layout="@layout/fragment_carousal" />
 
     <fragment
         android:id="@+id/navigation_history"
         android:name="com.assignment.ui.history.HistoryFragment"
         android:label="History"
-        tools:layout="@layout/fragment_url_history"> />
-    </fragment>
+        tools:layout="@layout/fragment_history" />
 </navigation>

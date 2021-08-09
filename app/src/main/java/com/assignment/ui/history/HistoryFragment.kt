@@ -6,9 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.assignment.databinding.FragmentUrlHistoryBinding
+import androidx.lifecycle.lifecycleScope
+import androidx.paging.PagingData
+import com.assignment.databinding.FragmentHistoryBinding
+import com.assignment.model.ShortUrlModel
+import com.assignment.model.UIState
 import com.assignment.viewmodel.HistoryViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -16,14 +22,14 @@ class HistoryFragment : Fragment() {
 
     private val viewModel: HistoryViewModel by viewModels()
 
-    private lateinit var binding: FragmentUrlHistoryBinding
+    private lateinit var binding: FragmentHistoryBinding
     private lateinit var adapter: HistoryPagingAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentUrlHistoryBinding.inflate(layoutInflater)
+        binding = FragmentHistoryBinding.inflate(layoutInflater)
 
         adapter = HistoryPagingAdapter()
 
@@ -35,14 +41,29 @@ class HistoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        viewModel.weatherForecastLiveData.observe(viewLifecycleOwner, Observer { forecastWeather ->
-//
-//        })
-        loadForecastWeatherData()
+        lifecycleScope.launch {
+//            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.historyStateFlow.collectLatest { it ->
+                    when (it) {
+                        is UIState.Loading -> {
+
+                        }
+                        is UIState.Success -> {
+                            adapter.submitData(it.data as PagingData<ShortUrlModel>)
+                        }
+                        else -> {
+
+                        }
+                    }
+//                    procesData(it)
+                }
+//            }
+        }
+        loadHistory()
     }
 
-    private fun loadForecastWeatherData() {
-//        viewModel.fetchForecastWeather("")
+    private fun loadHistory() {
+        viewModel.getHistory()
     }
 
 //    private fun showDate(city: String, list: List<com.assignment.model.ListItem>) {

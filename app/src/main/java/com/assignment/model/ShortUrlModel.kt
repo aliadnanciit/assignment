@@ -1,6 +1,7 @@
 package com.assignment.model
 
 data class ShortUrlModel(
+    val id : Int,
     val code: String = "",
     val shortLink: String = "",
     val shortLink2: String = "",

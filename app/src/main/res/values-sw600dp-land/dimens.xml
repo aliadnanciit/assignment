@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Padding & Margins-->
+    <dimen name="horizontal_margin_item_history">250dp</dimen>
+
+</resources>
