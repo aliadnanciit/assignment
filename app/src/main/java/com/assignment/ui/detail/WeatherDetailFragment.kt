@@ -5,12 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.assignment.databinding.FragmentForecastWeatherDetailBinding
-import com.assignment.viewmodel.FavCityWeatherViewModel
-import com.assignment.viewmodel.WeatherSettingViewModel
 import com.assignment.viewmodel.WeatherViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -23,8 +20,6 @@ class WeatherDetailFragment : Fragment() {
     lateinit var temperatureUtil: com.assignment.common.TemperatureUtil
 
     private val viewModel: WeatherViewModel by viewModels()
-    private val faveCityWeatherViewModel: FavCityWeatherViewModel by viewModels()
-    private val weatherSettingViewModel: WeatherSettingViewModel by activityViewModels()
 
     private var paramCity: String? = null
     private lateinit var binding: FragmentForecastWeatherDetailBinding
@@ -36,20 +31,13 @@ class WeatherDetailFragment : Fragment() {
     ): View {
         binding = FragmentForecastWeatherDetailBinding.inflate(layoutInflater)
 
-        binding.searchCityWeather.setOnClickListener {
-            loadForecastWeatherData(binding.autoCompleteSearchView.text.toString())
-        }
         adapter = ForecastWeatherListAdapter(
             temperatureUtil,
-            weatherSettingViewModel.showTempInDegree.value!!
+            true
         )
 
-        binding.weatherRecyclerView.adapter = adapter
-        binding.addAsFavCity.setOnClickListener {
-            if(binding.cityName.text.toString().isNotEmpty()) {
-                faveCityWeatherViewModel.add(binding.cityName.text.toString())
-            }
-        }
+        binding.recyclerView.adapter = adapter
+
         return binding.root
     }
 
@@ -62,18 +50,8 @@ class WeatherDetailFragment : Fragment() {
             }
         }
 
-        val visibility = if (paramCity == null) {
-            View.VISIBLE
-        }
-        else {
-            View.GONE
-        }
-        binding.searchPanel.visibility = visibility
-
         viewModel.weatherForecastLiveData.observe(viewLifecycleOwner, Observer { forecastWeather ->
-            forecastWeather.list?.let { list ->
-                showDate(forecastWeather.city.name, list)
-            }
+
         })
         loadForecastWeatherData(paramCity)
     }
@@ -87,12 +65,6 @@ class WeatherDetailFragment : Fragment() {
     }
 
     private fun showDate(city: String, list: List<com.assignment.model.ListItem>) {
-        binding.cityName.text = city
-        binding.weatherRecyclerView.visibility = View.VISIBLE
-        binding.cityInfoContainer.visibility = View.VISIBLE
-        if(paramCity == null) {
-            binding.addAsFavCity.isEnabled = true
-        }
         adapter.submitList(list)
     }
 }
