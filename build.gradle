@@ -17,6 +17,8 @@ buildscript {
         runtime_ktx_version = "2.4.0-alpha02"
 
         workmanager_version = "2.5.0"
+
+        paging_version = "3.0.1"
     }
 
     repositories {
