@@ -1,12 +1,13 @@
 package com.assignment.database
 
+import androidx.paging.PagingSource
 import androidx.room.*
 
 @Dao
 interface HistoryDao {
 
-    @Query("SELECT * FROM HistoryEntity")
-    suspend fun getHistory(): List<HistoryEntity>
+    @Query("SELECT * FROM HistoryEntity ORDER BY id ASC")
+    fun getHistory(): PagingSource<Int, HistoryEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(historyEntity: HistoryEntity)

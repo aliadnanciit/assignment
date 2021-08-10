@@ -16,7 +16,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-
 @AndroidEntryPoint
 class HistoryFragment : Fragment() {
 
@@ -32,7 +31,6 @@ class HistoryFragment : Fragment() {
         binding = FragmentHistoryBinding.inflate(layoutInflater)
 
         adapter = HistoryPagingAdapter()
-
         binding.recyclerView.adapter = adapter
 
         return binding.root
@@ -55,7 +53,6 @@ class HistoryFragment : Fragment() {
 
                         }
                     }
-//                    procesData(it)
                 }
 //            }
         }
@@ -65,8 +62,4 @@ class HistoryFragment : Fragment() {
     private fun loadHistory() {
         viewModel.getHistory()
     }
-
-//    private fun showDate(city: String, list: List<com.assignment.model.ListItem>) {
-//        adapter.submitList(list)
-//    }
 }

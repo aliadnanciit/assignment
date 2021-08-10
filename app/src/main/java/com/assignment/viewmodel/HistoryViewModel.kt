@@ -2,7 +2,6 @@ package com.assignment.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.cachedIn
 import com.assignment.model.UIState
 import com.assignment.usecase.GetHistoryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,7 +22,7 @@ class HistoryViewModel @Inject constructor(
     fun getHistory() {
         viewModelScope.launch {
             getHistoryUseCase.getHistory()
-                .cachedIn(viewModelScope)
+//                .cachedIn(viewModelScope)
                 .collect {
                     _historyStateFlow.value = UIState.Success(it)
                 }

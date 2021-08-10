@@ -1,12 +1,14 @@
 package com.assignment.repository
 
-import androidx.paging.*
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.map
 import com.assignment.database.HistoryDao
 import com.assignment.database.HistoryEntity
 import com.assignment.model.ShortUrlModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -31,7 +33,7 @@ class HistoryRepositoryImpl @Inject constructor(
         return Pager(
                 config = PagingConfig(pageSize = NETWORK_PAGE_SIZE, enablePlaceholders = false),
                 pagingSourceFactory = {
-                    HistoryPagingSource(historyDao)
+                    historyDao.getHistory()
                 }
             ).flow
                 .map { pagingData ->
@@ -43,7 +45,7 @@ class HistoryRepositoryImpl @Inject constructor(
 
     private fun convert(historyEntity: HistoryEntity): ShortUrlModel {
         return ShortUrlModel(
-            id = historyEntity.uid!!,
+            id = historyEntity.id!!,
             code = historyEntity.code,
             shortLink = historyEntity.shortLink,
             fullShortLink = historyEntity.fullShortLink,
