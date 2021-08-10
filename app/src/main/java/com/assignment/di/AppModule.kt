@@ -1,5 +1,7 @@
 package com.assignment.di
 
+import android.os.Build
+import com.assignment.common.BuildSdkVersionChecker
 import com.assignment.repository.HistoryRepository
 import com.assignment.repository.HistoryRepositoryImpl
 import com.assignment.repository.ShortenUrlRepository
@@ -12,6 +14,7 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import javax.inject.Named
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -31,5 +34,11 @@ abstract class AppModule {
         @Provides
         @Named("DEFAULT_DISPATCHER")
         fun provideDefaultDispatcher(): CoroutineDispatcher = Dispatchers.Default
+
+        @Provides
+        @Singleton
+        fun provideBuildSdkVersion(): BuildSdkVersionChecker {
+            return BuildSdkVersionChecker(Build.VERSION.SDK_INT)
+        }
     }
 }

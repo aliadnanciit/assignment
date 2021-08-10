@@ -1,27 +1,23 @@
 package com.assignment.usecase
 
-import android.content.ClipData
-import android.content.Context
 import android.os.Build
-import com.assignment.exception.InvalidURLException
-import com.assignment.model.ShortURL
-import com.assignment.repository.ShortenUrlRepository
-import com.assignment.rules.UrlValidationRule
-import dagger.hilt.android.qualifiers.ApplicationContext
+import com.assignment.common.AppClipboardManager
+import com.assignment.common.BuildSdkVersionChecker
 import javax.inject.Inject
 
 class CopyToClipboardUseCase @Inject constructor(
-    @ApplicationContext private val applicationContext: Context
+    private val buildSdkVersionChecker: BuildSdkVersionChecker,
+    private val appClipboardManager: AppClipboardManager
 ) {
-    fun copy(url: String) : Boolean{
+    fun copy(url: String): Boolean {
         return try {
-            val sdk = Build.VERSION.SDK_INT
+            val sdk = buildSdkVersionChecker.getSdkVersion() //Build.VERSION.SDK_INT
             if (sdk < Build.VERSION_CODES.HONEYCOMB) {
-                val clipboard = applicationContext.getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
+                val clipboard = appClipboardManager.getSystemClipboardManager()
                 clipboard.text = url
             } else {
-                val clipboard = applicationContext.getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
-                val clip = ClipData.newPlainText("Label", url)
+                val clipboard = appClipboardManager.getSystemClipboardManager()
+                val clip = appClipboardManager.getClipData(url)
                 clipboard.setPrimaryClip(clip)
             }
             true
