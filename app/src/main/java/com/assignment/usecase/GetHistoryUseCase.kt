@@ -10,7 +10,7 @@ class GetHistoryUseCase @Inject constructor(
     private val historyRepository: HistoryRepository
 ) {
 
-    fun getHistory() : Flow<PagingData<ShortUrlModel>> {
+    suspend fun getHistory() : Flow<PagingData<ShortUrlModel>> {
         return historyRepository.getHistory()
     }
 }

@@ -23,20 +23,15 @@ class HistoryRepositoryImpl @Inject constructor(
         const val NETWORK_PAGE_SIZE = 30
     }
 
-    override suspend fun add() {
-        withContext(ioDispatcher) {
-
-        }
-    }
-
     override suspend fun delete(id: Int) {
         withContext(ioDispatcher) {
             historyDao.delete(id)
         }
     }
 
-    override fun getHistory(): Flow<PagingData<ShortUrlModel>> {
-        return Pager(
+    override suspend fun getHistory(): Flow<PagingData<ShortUrlModel>> {
+        return withContext(ioDispatcher) {
+            Pager(
                 config = PagingConfig(pageSize = NETWORK_PAGE_SIZE, enablePlaceholders = false),
                 pagingSourceFactory = {
                     historyDao.getHistory()
@@ -47,6 +42,7 @@ class HistoryRepositoryImpl @Inject constructor(
                         convert(user)
                     }
                 }
+        }
     }
 
     private fun convert(historyEntity: HistoryEntity): ShortUrlModel {
