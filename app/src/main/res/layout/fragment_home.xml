@@ -3,60 +3,93 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="16dp"
     android:background="@color/off_white_color"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView android:id="@+id/text_shortly"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/info_container"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Shortly"
-        android:textColor="@android:color/black"
-        style="@style/TextAppearance.MaterialComponents.Headline4"
-        android:textStyle="bold"
+        android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-    <ImageView android:id="@+id/image_splash"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        app:layout_constraintDimensionRatio="h, 6:4.5"
-        android:src="@drawable/ic_shortly_illustration"
-        app:layout_constraintTop_toBottomOf="@id/text_shortly"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        <TextView android:id="@+id/text_shortly"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Shortly"
+            android:textAppearance="@style/heading"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
 
-    <TextView android:id="@+id/text_shorter_links"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Let's get started!"
-        android:textColor="@android:color/black"
-        style="@style/TextAppearance.MaterialComponents.Headline5"
-        android:textStyle="bold"
-        android:textAlignment="center"
-        app:layout_constraintTop_toBottomOf="@id/image_splash"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        <ImageView android:id="@+id/image_splash"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="h, 6:4.5"
+            android:src="@drawable/ic_shortly_illustration"
+            app:layout_constraintTop_toBottomOf="@id/text_shortly"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
 
-    <TextView android:id="@+id/text_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Paste your first link into \nthe fields to shorten it"
-        android:textColor="@android:color/black"
-        android:textAlignment="center"
-        style="@style/TextAppearance.MaterialComponents.Headline6"
-        android:layout_marginTop="4dp"
-        app:layout_constraintTop_toBottomOf="@id/text_shorter_links"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        <TextView android:id="@+id/text_shorter_links"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Let's get started!"
+            android:textAppearance="@style/title"
+            android:textAlignment="center"
+            app:layout_constraintTop_toBottomOf="@id/image_splash"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+        <TextView android:id="@+id/text_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="42dp"
+            android:text="Paste your first link into the fields to shorten it"
+            android:textAppearance="@style/label"
+            android:layout_marginTop="4dp"
+            android:gravity="center"
+            app:layout_constraintTop_toBottomOf="@id/text_shorter_links"
+            app:layout_constraintStart_toStartOf="@+id/image_splash"
+            app:layout_constraintEnd_toEndOf="@+id/image_splash"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/history_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView android:id="@+id/title_links"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your Link History"
+            android:textAppearance="@style/label"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="4dp"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            tools:listitem="@layout/item_history"
+            app:layout_constraintTop_toBottomOf="@+id/title_links"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/buttons_container"
+        android:id="@+id/shorten_url_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#4B3F6B"
+        android:background="@color/violet_color_dark"
         android:padding="40dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -70,8 +103,9 @@
             android:ems="10"
             android:text="https://developer.android.com/topic/libraries/architecture/paging/v3-network-db"
             android:inputType="textPersonName"
-            android:padding="16dp"
-            android:hint="Shorten a link here..."
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="12dp"
+            android:hint="Shorten a link here ..."
             android:gravity="center"
             android:textAllCaps="false"
             android:textSize="24sp"
@@ -83,19 +117,11 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_shorten"
-            style="@style/Widget.MaterialComponents.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:letterSpacing="0"
-            android:paddingVertical="16dp"
             android:text="Shorten It!"
-            android:textAllCaps="true"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:cornerRadius="6dp"
-            android:textColor="@android:color/white"
-            android:backgroundTint="#2ACFCF"
-            android:layout_marginTop="16dp"
+            android:textAppearance="@style/button"
+            android:layout_marginTop="4dp"
             app:layout_constraintTop_toBottomOf="@id/edittext_link"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
