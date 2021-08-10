@@ -19,7 +19,7 @@ class ShortURLViewModel @Inject constructor(
     val uiStateLiveData : LiveData<UIState> = _uiStateLiveData
 
     fun createShortUrl(url: String) {
-        _uiStateLiveData.value = UIState.Loading
+        _uiStateLiveData.value = UIState.ShowInfo
 
         viewModelScope.launch {
             try {
@@ -32,30 +32,4 @@ class ShortURLViewModel @Inject constructor(
             }
         }
     }
-
-
-    fun fetchPages() {
-//        val flow = Pager(PagingConfig(20)) {
-//            ExamplePagingSource(createShortURLUseCase, "dubai")
-//        }.flow
-//            .launchIn(viewModelScope)
-    }
 }
-
-//class ExamplePagingSource(
-//    private val getHistoryUseCase: com.assignment.usecase.GetHistoryUseCase,
-//    val city: String
-//): PagingSource<Int, com.assignment.model.ListItem>() {
-//    override fun getRefreshKey(state: PagingState<Int, com.assignment.model.ListItem>): Int? {
-//        return state.anchorPosition?.plus(1)
-//    }
-//
-//    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, com.assignment.model.ListItem> {
-//        return try {
-//            val response = getHistoryUseCase.execute(city)
-//            LoadResult.Page(data = response.list!!, prevKey = null, nextKey = 1)
-//        } catch (e: java.lang.Exception) {
-//            LoadResult.Error(e)
-//        }
-//    }
-//}

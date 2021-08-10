@@ -11,15 +11,20 @@ import androidx.paging.PagingData
 import com.assignment.databinding.FragmentHistoryBinding
 import com.assignment.model.ShortUrlModel
 import com.assignment.model.UIState
+import com.assignment.usecase.CopyToClipboardUseCase
 import com.assignment.viewmodel.HistoryViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class HistoryFragment : Fragment(), HistoryClickListener {
 
     private val viewModel: HistoryViewModel by viewModels()
+
+    @Inject
+    lateinit var copyToClipboardUseCase: CopyToClipboardUseCase
 
     private lateinit var binding: FragmentHistoryBinding
     private lateinit var adapter: HistoryPagingAdapter
@@ -30,7 +35,7 @@ class HistoryFragment : Fragment(), HistoryClickListener {
     ): View {
         binding = FragmentHistoryBinding.inflate(layoutInflater)
 
-        adapter = HistoryPagingAdapter(this)
+        adapter = HistoryPagingAdapter(this, copyToClipboardUseCase)
         binding.recyclerView.adapter = adapter
 
         return binding.root
@@ -40,21 +45,19 @@ class HistoryFragment : Fragment(), HistoryClickListener {
         super.onViewCreated(view, savedInstanceState)
 
         lifecycleScope.launch {
-//            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.historyStateFlow.collectLatest { it ->
-                    when (it) {
-                        is UIState.Loading -> {
+            viewModel.historyStateFlow.collectLatest { it ->
+                when (it) {
+                    is UIState.ShowInfo -> {
 
-                        }
-                        is UIState.Success -> {
-                            adapter.submitData(it.data as PagingData<ShortUrlModel>)
-                        }
-                        else -> {
+                    }
+                    is UIState.Success -> {
+                        adapter.submitData(it.data as PagingData<ShortUrlModel>)
+                    }
+                    else -> {
 
-                        }
                     }
                 }
-//            }
+            }
         }
         loadHistory()
     }

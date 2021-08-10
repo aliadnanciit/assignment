@@ -6,7 +6,7 @@ import androidx.room.*
 @Dao
 interface HistoryDao {
 
-    @Query("SELECT * FROM HistoryEntity ORDER BY id ASC")
+    @Query("SELECT * FROM HistoryEntity ORDER BY id DESC")
     fun getHistory(): PagingSource<Int, HistoryEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

@@ -18,13 +18,12 @@ class HistoryViewModel @Inject constructor(
     private val deleteHistoryUseCase: DeleteHistoryUseCase
 ) : ViewModel() {
 
-    private val _historyStateFlow = MutableStateFlow<UIState>(UIState.Loading)
+    private val _historyStateFlow = MutableStateFlow<UIState>(UIState.ShowInfo)
     val historyStateFlow: StateFlow<UIState> = _historyStateFlow
 
     fun getHistory() {
         viewModelScope.launch {
             getHistoryUseCase.getHistory()
-//                .cachedIn(viewModelScope)
                 .collect {
                     _historyStateFlow.value = UIState.Success(it)
                 }

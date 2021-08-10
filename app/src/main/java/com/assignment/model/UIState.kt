@@ -2,7 +2,7 @@ package com.assignment.model
 
 sealed class UIState {
 
-    object Loading: UIState()
+    object ShowInfo: UIState()
 
     data class Success(val data: Any): UIState()
 
