@@ -11,9 +11,10 @@ class CreateShortURLUseCase @Inject constructor(
     private val shortenUrlRepository: ShortenUrlRepository
 ) {
     suspend fun create(url: String) : ShortURL {
-        if(urlValidationRule.isValid(url).not()) {
+        val updatedUrl = url.replace(" ", "%20")
+        if(urlValidationRule.isValid(updatedUrl).not()) {
             throw InvalidURLException("Invalid url")
         }
-        return shortenUrlRepository.createShortenUrl(url)
+        return shortenUrlRepository.createShortenUrl(updatedUrl)
     }
 }
