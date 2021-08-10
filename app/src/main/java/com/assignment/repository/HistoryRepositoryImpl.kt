@@ -29,6 +29,12 @@ class HistoryRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun delete(id: Int) {
+        withContext(ioDispatcher) {
+            historyDao.delete(id)
+        }
+    }
+
     override fun getHistory(): Flow<PagingData<ShortUrlModel>> {
         return Pager(
                 config = PagingConfig(pageSize = NETWORK_PAGE_SIZE, enablePlaceholders = false),

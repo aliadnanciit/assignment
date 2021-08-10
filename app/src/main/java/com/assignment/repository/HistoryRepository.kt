@@ -9,4 +9,6 @@ interface HistoryRepository {
     suspend fun add()
 
     fun getHistory() : Flow<PagingData<ShortUrlModel>>
+
+    suspend fun delete(id: Int)
 }

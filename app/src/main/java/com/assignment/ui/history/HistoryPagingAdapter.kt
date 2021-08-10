@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.assignment.databinding.ItemHistoryBinding
 import com.assignment.model.ShortUrlModel
 
-class HistoryPagingAdapter : PagingDataAdapter<ShortUrlModel, HistoryViewHolder>(DIFF) {
+class HistoryPagingAdapter(
+    private val historyClickListener: HistoryClickListener
+) : PagingDataAdapter<ShortUrlModel, HistoryViewHolder>(DIFF) {
 
     companion object {
         val DIFF = object : DiffUtil.ItemCallback<ShortUrlModel>() {
@@ -27,11 +29,12 @@ class HistoryPagingAdapter : PagingDataAdapter<ShortUrlModel, HistoryViewHolder>
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryViewHolder {
-        return HistoryViewHolder(
-            ItemHistoryBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false
-            )
-        )
+        val binding = ItemHistoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        binding.imageDelete.setOnClickListener {
+            val tag = it.tag as ShortUrlModel
+            historyClickListener.onClick(tag)
+        }
+        return HistoryViewHolder(binding)
     }
 }
 
@@ -41,6 +44,7 @@ class HistoryViewHolder(
 
     fun bind(item: ShortUrlModel) {
         binding.root.tag = item
+        binding.imageDelete.tag = item
 
         binding.shortLink.text = item.shortLink
         binding.link.text = item.fullShortLink

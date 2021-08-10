@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class HistoryFragment : Fragment() {
+class HistoryFragment : Fragment(), HistoryClickListener {
 
     private val viewModel: HistoryViewModel by viewModels()
 
@@ -30,7 +30,7 @@ class HistoryFragment : Fragment() {
     ): View {
         binding = FragmentHistoryBinding.inflate(layoutInflater)
 
-        adapter = HistoryPagingAdapter()
+        adapter = HistoryPagingAdapter(this)
         binding.recyclerView.adapter = adapter
 
         return binding.root
@@ -61,5 +61,9 @@ class HistoryFragment : Fragment() {
 
     private fun loadHistory() {
         viewModel.getHistory()
+    }
+
+    override fun onClick(shortUrlModel: ShortUrlModel) {
+        viewModel.deleteHistory(shortUrlModel.id)
     }
 }
